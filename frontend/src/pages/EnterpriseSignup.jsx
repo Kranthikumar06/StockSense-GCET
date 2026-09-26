@@ -355,33 +355,6 @@ export default function EnterpriseSignup() {
                   <p className="text-xs font-medium leading-snug">"Cycle count variances dropped to 0.02% within 14 days of pilot deployment."</p>
                 </div>
               </div>
-
-              {/* Floating Badge 1: Top Right */}
-              <aside className="absolute -top-2 -right-2 sm:-right-3 z-20 bg-white p-3 rounded-2xl shadow-float-card border border-slate-100 flex items-center gap-2.5" data-purpose="metric-badge-top">
-                <div className="w-8 h-8 rounded-xl bg-orange-50 text-brand-coral flex items-center justify-center font-bold">
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path d="M13 10V3L4 14h7v7l9-11h-7z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
-                  </svg>
-                </div>
-                <div>
-                  <div className="text-[11px] font-bold text-brand-navy">12,400+ Docks</div>
-                  <div className="text-[9px] text-brand-softGray">Automated Globally</div>
-                </div>
-              </aside>
-
-              {/* Floating Badge 2: Lower Left */}
-              <aside className="absolute -bottom-2 -left-2 sm:bottom-3 sm:-left-3 z-20 bg-white/95 backdrop-blur-md p-3 rounded-2xl shadow-float-card border border-slate-100 max-w-[200px]" data-purpose="metric-badge-bottom">
-                <div className="flex items-center gap-1.5 mb-0.5">
-                  <span className="flex h-2 w-2 relative">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                  </span>
-                  <span className="text-[9px] font-bold uppercase tracking-wider text-emerald-700">99.98% Accuracy</span>
-                </div>
-                <p className="text-[11px] text-brand-navy font-semibold leading-tight">
-                  Immutable pallet tracking via RFID.
-                </p>
-              </aside>
             </div>
           </section>
         </div>

@@ -163,9 +163,11 @@ export default function EnterpriseLogin() {
           </Link>
 
           <div className="flex items-center gap-3 sm:gap-4">
+            <span className="hidden sm:inline text-brand-softGray text-xs sm:text-sm font-normal">Don't have an account?</span>
             <Link
               to="/signup"
-              className="inline-flex items-center justify-center px-3.5 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-semibold text-brand-dark hover:text-white border border-brand-dark/80 hover:border-brand-dark hover:bg-brand-dark rounded-xl transition duration-200 shadow-sm"
+              className="font-medium text-brand-navy border border-slate-300 hover:border-brand-navy px-3.5 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm rounded-lg transition-all hover:bg-slate-50 shadow-sm"
+              data-purpose="sign-up-action"
             >
               Sign Up
             </Link>
@@ -177,19 +179,19 @@ export default function EnterpriseLogin() {
       <main className="relative z-10 flex-grow flex items-center justify-center w-full max-w-[1600px] mx-auto px-4 sm:px-8 lg:px-14 xl:px-16 py-4 sm:py-6 lg:py-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 xl:gap-14 items-center w-full">
           {/* Left Column: Enterprise Login */}
-          <div className="lg:col-span-6 w-full max-w-md sm:max-w-lg mx-auto lg:mx-0" data-purpose="auth-container">
-            <div className="inline-flex items-center gap-2 mb-1.5 sm:mb-2">
-              <span className="text-[10px] sm:text-xs font-extrabold tracking-wider uppercase text-brand-orange">
-                INTELLIGENT SUPPLY CHAIN &amp; WMS
+          <section className="lg:col-span-6 w-full max-w-md sm:max-w-lg mx-auto lg:mx-0 flex flex-col justify-center" data-purpose="auth-container">
+            <div className="mb-1.5 sm:mb-2">
+              <span className="uppercase tracking-widest text-[10px] sm:text-xs font-bold text-brand-coral">
+                User Sign In
               </span>
             </div>
 
-            <h1 className="text-2xl sm:text-3xl lg:text-[32px] font-bold text-brand-dark tracking-tight leading-tight mb-1.5 sm:mb-2">
-              Log in, <span className="text-brand-orange underline decoration-brand-orange/40 decoration-wavy underline-offset-4">optimize</span> and take control of your warehouse.
+            <h1 className="text-2xl sm:text-3xl lg:text-[32px] leading-tight font-bold text-brand-navy tracking-tight mb-1.5 sm:mb-2 font-serif">
+              Streamline &amp; empower <span className="custom-underline px-1">your warehouse</span> operations.
             </h1>
 
-            <p className="text-xs sm:text-[13px] text-brand-muted leading-relaxed mb-4 sm:mb-5 font-normal">
-              Access real-time stock telemetry, automated inbound sorting, and compliance suite.
+            <p className="text-xs sm:text-[13px] text-brand-softGray mb-4 sm:mb-5 leading-relaxed font-normal">
+              Sign in below to access your StockSense inventory management system.
             </p>
 
             {/* Error Banner */}
@@ -201,107 +203,95 @@ export default function EnterpriseLogin() {
             )}
 
             {/* Login Form Card */}
-            <div className="bg-white/95 sm:bg-white/90 backdrop-blur-md border border-stone-200/80 rounded-2xl p-4 sm:p-6 shadow-float-card transition-all">
-              <form className="space-y-3 sm:space-y-3.5" onSubmit={handleSubmit} noValidate>
-                {/* Email / Name Field */}
-                <div>
-                  <label className="block text-[11px] font-bold uppercase tracking-wider text-brand-dark mb-1" htmlFor="work-email">
-                    Enterprise Email or Name
+            <form className="space-y-3 sm:space-y-3.5 bg-white/95 sm:bg-white/90 backdrop-blur-sm p-4 sm:p-6 rounded-2xl border border-slate-200/90 shadow-float-card" onSubmit={handleSubmit} noValidate>
+              {/* Field 1: Enter Email or Name */}
+              <div>
+                <label className="block text-[11px] font-semibold text-brand-navy mb-1" htmlFor="work-email">
+                  Enter Email or Name
+                </label>
+                <input
+                  className="w-full px-3.5 py-2.5 sm:py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-amber/50 focus:border-brand-amber transition-colors text-slate-800 placeholder:text-slate-400"
+                  id="work-email"
+                  name="email"
+                  placeholder="Enter Email or Name"
+                  required
+                  type="text"
+                  value={formData.email}
+                  onChange={handleChange}
+                />
+              </div>
+
+              {/* Field 2: Enter Password */}
+              <div>
+                <div className="flex items-center justify-between mb-1">
+                  <label className="block text-[11px] font-semibold text-brand-navy" htmlFor="password">
+                    Enter Password
                   </label>
-                  <div className="relative rounded-xl">
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-stone-400">
-                      <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.206" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8"></path>
-                      </svg>
-                    </div>
-                    <input
-                      className="w-full pl-9 pr-3.5 py-2.5 sm:py-2 bg-white text-brand-dark text-sm placeholder:text-stone-400 border border-stone-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-amber focus:border-brand-amber transition duration-150"
-                      id="work-email"
-                      name="email"
-                      placeholder="name@company.com or User Name"
-                      required
-                      type="text"
-                      value={formData.email}
-                      onChange={handleChange}
-                    />
-                  </div>
-                </div>
-
-                {/* Password Field */}
-                <div>
-                  <div className="flex items-center justify-between mb-1">
-                    <label className="block text-[11px] font-bold uppercase tracking-wider text-brand-dark" htmlFor="password">
-                      Password
-                    </label>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setForgotModalOpen(true);
-                        setForgotStep(1);
-                        setResetErrorMsg(null);
-                        setResetStatusMsg(null);
-                      }}
-                      className="text-xs font-semibold text-brand-orange hover:underline focus:outline-none"
-                    >
-                      Forgot Password?
-                    </button>
-                  </div>
-                  <div className="relative rounded-xl">
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-stone-400">
-                      <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8"></path>
-                      </svg>
-                    </div>
-                    <input
-                      className="w-full pl-9 pr-3.5 py-2.5 sm:py-2 bg-white text-brand-dark text-sm placeholder:text-stone-400 border border-stone-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-amber focus:border-brand-amber transition duration-150"
-                      id="password"
-                      name="password"
-                      placeholder="••••••••••••"
-                      required
-                      type="password"
-                      value={formData.password}
-                      onChange={handleChange}
-                    />
-                  </div>
-                </div>
-
-                {/* Remember Checkbox */}
-                <div className="flex items-center justify-between pt-0.5">
-                  <label className="flex items-center space-x-2 cursor-pointer">
-                    <input
-                      className="w-4 h-4 rounded text-brand-amber border-stone-300 focus:ring-brand-amber transition cursor-pointer"
-                      name="remember"
-                      type="checkbox"
-                      checked={formData.remember}
-                      onChange={handleChange}
-                    />
-                    <span className="text-xs text-brand-muted">Remember this terminal</span>
-                  </label>
-                </div>
-
-                {/* Submit Button */}
-                <div className="pt-1">
                   <button
-                    className={`w-full min-h-[44px] py-2.5 px-5 rounded-xl text-white font-semibold text-sm tracking-wide shadow-glow-orange hover:shadow-md transition duration-200 flex items-center justify-center gap-2 cursor-pointer ${
-                      submitting ? 'bg-slate-400 cursor-not-allowed' : 'bg-gradient-to-r from-brand-amber to-[#F59000] hover:from-[#e59b00] hover:to-[#e08300]'
-                    }`}
-                    type="submit"
-                    disabled={submitting}
+                    type="button"
+                    onClick={() => {
+                      setForgotModalOpen(true);
+                      setForgotStep(1);
+                      setResetErrorMsg(null);
+                      setResetStatusMsg(null);
+                    }}
+                    className="text-xs font-semibold text-brand-amber hover:underline focus:outline-none"
                   >
-                    <span>{submitting ? 'Authenticating...' : 'Sign In to Terminal'}</span>
-                    <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path d="M14 5l7 7m0 0l-7 7m7-7H3" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5"></path>
-                    </svg>
+                    Forgot Password?
                   </button>
                 </div>
+                <input
+                  className="w-full px-3.5 py-2.5 sm:py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-amber/50 focus:border-brand-amber transition-colors text-slate-800 placeholder:text-slate-400"
+                  id="password"
+                  name="password"
+                  placeholder="Enter Password"
+                  required
+                  type="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                />
+              </div>
 
-                {/* Divider */}
-                <div className="relative flex items-center justify-center my-3 sm:my-3.5">
-                  <div className="border-t border-stone-200 w-full"></div>
-                  <span className="bg-white px-3 text-[10px] font-semibold uppercase text-brand-muted tracking-widest absolute">
-                    Or Continue With
-                  </span>
-                </div>
+              {/* Remember Checkbox */}
+              <div className="flex items-center justify-between pt-0.5">
+                <label className="flex items-center space-x-2 cursor-pointer">
+                  <input
+                    className="w-4 h-4 rounded text-brand-amber border-slate-300 focus:ring-brand-amber transition cursor-pointer"
+                    name="remember"
+                    type="checkbox"
+                    checked={formData.remember}
+                    onChange={handleChange}
+                  />
+                  <span className="text-xs text-brand-softGray font-normal">Remember this terminal</span>
+                </label>
+              </div>
+
+              {/* Submit Button */}
+              <div className="pt-1">
+                <button
+                  className={`w-full min-h-[44px] py-2.5 text-white font-semibold text-sm rounded-xl shadow-glow-warm hover:shadow-md transition-all duration-200 flex items-center justify-center gap-2 group cursor-pointer ${
+                    submitting
+                      ? 'bg-slate-400 cursor-not-allowed'
+                      : 'bg-gradient-to-r from-brand-amber to-[#F59E0B] hover:from-[#e29900] hover:to-[#df8b00]'
+                  }`}
+                  data-purpose="submit-button"
+                  type="submit"
+                  disabled={submitting}
+                >
+                  <span>{submitting ? 'Authenticating...' : 'SIGN IN'}</span>
+                  <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path d="M14 5l7 7m0 0l-7 7m7-7H3" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
+                  </svg>
+                </button>
+              </div>
+
+              {/* Divider */}
+              <div className="relative flex items-center justify-center my-3 sm:my-3.5">
+                <div className="border-t border-slate-200 w-full"></div>
+                <span className="bg-white px-3 text-[10px] font-semibold uppercase text-brand-softGray tracking-widest absolute">
+                  Or Continue With
+                </span>
+              </div>
 
                 {/* Google Auth Error State */}
                 {googleError && (
@@ -340,18 +330,7 @@ export default function EnterpriseLogin() {
                   )}
                 </div>
               </form>
-
-              {/* Bottom Switch Link */}
-              <div className="mt-3.5 pt-3 border-t border-stone-100 text-center">
-                <p className="text-xs text-brand-muted">
-                  Don't have an account yet?{' '}
-                  <Link className="font-bold text-brand-dark hover:text-brand-orange underline underline-offset-2 ml-1 transition" to="/signup">
-                    Create New Account
-                  </Link>
-                </p>
-              </div>
-            </div>
-          </div>
+          </section>
 
           {/* Right Column: Visual Composition */}
           <div className="hidden lg:flex lg:col-span-6 relative items-center justify-center w-full" data-purpose="hero-imagery-composition">
