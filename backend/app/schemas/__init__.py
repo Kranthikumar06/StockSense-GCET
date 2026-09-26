@@ -1,3 +1,3 @@
-from app.schemas.user import UserCreate, UserResponse
+from app.schemas.auth import GoogleAuthRequest, UserResponse, TokenResponse
 
-__all__ = ["UserCreate", "UserResponse"]
+__all__ = ["GoogleAuthRequest", "UserResponse", "TokenResponse"]

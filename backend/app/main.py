@@ -5,13 +5,23 @@ from sqlalchemy import text
 
 from app.database import get_db, Base, engine
 import app.models  # load all models into Base.metadata
-from app.routers.auth import router as auth_router
+from app.routers import auth
 
 # Create tables in Neon PostgreSQL database
 Base.metadata.create_all(bind=engine)
 
+# Safely migrate existing users table schema in Neon
+try:
+    with engine.connect() as conn:
+        conn.execute(text("ALTER TABLE users ADD COLUMN IF NOT EXISTS auth_provider VARCHAR DEFAULT 'email';"))
+        conn.execute(text("ALTER TABLE users ALTER COLUMN password_hash DROP NOT NULL;"))
+        conn.commit()
+except Exception as e:
+    print(f"Database schema check notice: {e}")
+
 app = FastAPI(title="StockSense API")
 
+# Enable CORS for frontend integration
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -20,7 +30,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(auth_router)
+# Register routers
+app.include_router(auth.router)
 
 
 @app.get("/")
