@@ -346,9 +346,9 @@ export default function WarehouseOperations() {
         {/* ============================================================ */}
         <div className="flex-1 flex flex-col min-w-0 overflow-hidden relative">
           {/* Top Header Bar */}
-          <header className="h-16 bg-white border-b border-slate-200 px-6 flex items-center justify-between flex-shrink-0 z-20">
-            {/* Left: Mobile menu button + Warehouse Location Dropdown */}
-            <div className="flex items-center gap-3">
+          <header className="h-16 bg-white border-b border-slate-200 px-4 sm:px-6 flex items-center justify-between gap-4 flex-shrink-0 z-20">
+            {/* Left: Mobile menu button & Left-Aligned Search Bar */}
+            <div className="flex items-center gap-3 flex-1 max-w-2xl">
               <button
                 onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
                 className="lg:hidden p-2 text-slate-600 hover:bg-slate-100 rounded-xl"
@@ -357,63 +357,25 @@ export default function WarehouseOperations() {
                 <span className="material-symbols-outlined text-[22px]">menu</span>
               </button>
 
-              <button
-                className="flex items-center gap-2.5 px-3.5 py-1.5 bg-slate-50 hover:bg-slate-100 border border-slate-200/90 rounded-xl text-xs font-semibold text-slate-700 shadow-2xs transition-all"
-                type="button"
-              >
-                <span className="material-symbols-outlined text-orange-600 text-[18px]">warehouse</span>
-                <span>Main Warehouse - Floor 1</span>
-                <span className="material-symbols-outlined text-slate-400 text-[16px]">expand_more</span>
-              </button>
-            </div>
-
-            {/* Center: Global Quick Search Bar */}
-            <div className="hidden md:flex relative w-[380px] lg:w-[440px]">
-              <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                <span className="material-symbols-outlined text-[18px]">search</span>
-              </div>
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search SKU, operation ref, partner..."
-                className="w-full bg-slate-50/80 border border-slate-200/90 rounded-xl pl-9 pr-11 py-1.5 text-xs text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all"
-              />
-              <div className="absolute inset-y-0 right-0 pr-2.5 flex items-center pointer-events-none">
-                <kbd className="px-1.5 py-0.5 text-[10px] font-mono text-slate-400 bg-white border border-slate-200 rounded shadow-2xs font-semibold">
+              <div className="relative flex items-center flex-1">
+                <span className="material-symbols-outlined text-slate-400 text-[18px] absolute left-3 pointer-events-none">
+                  search
+                </span>
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search SKU, operation ref, partner..."
+                  className="w-full bg-slate-100/80 border border-slate-200/80 focus:bg-white focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 rounded-xl pl-9 pr-12 py-2 text-xs text-slate-800 placeholder:text-slate-400 font-normal transition outline-none"
+                />
+                <kbd className="absolute right-2.5 px-1.5 py-0.5 text-[10px] font-mono font-medium text-slate-400 bg-white border border-slate-200/80 rounded shadow-2xs pointer-events-none">
                   ⌘K
                 </kbd>
               </div>
             </div>
 
-            {/* Right: Status Indicators, Notifications, CTA Button */}
-            <div className="flex items-center gap-3">
-              {/* Online status */}
-              <div className="flex items-center gap-1.5 bg-emerald-50 text-emerald-700 border border-emerald-200/60 font-medium text-xs px-3 py-1 rounded-full">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                <span>Online</span>
-              </div>
-
-              {/* Feed Chip */}
-              <div className="hidden xl:flex items-center gap-1.5 bg-slate-50 text-slate-600 border border-slate-200 text-xs px-3 py-1 rounded-full font-medium">
-                <span className="text-orange-500 font-mono text-[11px]">((•))</span>
-                <span>Live Stock Feed</span>
-              </div>
-
-              {/* Notifications */}
-              <button
-                className="relative p-2 text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-xl transition-colors"
-                type="button"
-                title="3 Unread Dispatch Notifications"
-                onClick={() => showToast('3 Incoming PO Shipments ready for receiving inspection.')}
-              >
-                <span className="material-symbols-outlined text-[20px]">notifications</span>
-                <span className="absolute top-1 right-1 bg-orange-600 text-white font-bold text-[10px] w-4 h-4 rounded-full flex items-center justify-center ring-2 ring-white">
-                  3
-                </span>
-              </button>
-
-              {/* Primary CTA Button */}
+            {/* Right: Primary CTA Button */}
+            <div className="flex items-center gap-3 shrink-0">
               <button
                 onClick={() => setDrawerOpen(true)}
                 className="bg-orange-600 hover:bg-orange-700 active:bg-orange-800 text-white font-semibold text-xs px-4 py-2 rounded-xl shadow-xs flex items-center gap-1.5 transition-all shadow-orange-500/20 active:scale-95"
@@ -421,7 +383,7 @@ export default function WarehouseOperations() {
                 id="openNewOpBtn"
               >
                 <span className="material-symbols-outlined text-[18px]">add</span>
-                <span>+ Create Operation</span>
+                <span>Create Operation</span>
               </button>
             </div>
           </header>
@@ -433,12 +395,6 @@ export default function WarehouseOperations() {
             {/* Top Operational Context & Actions Row */}
             <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-4 pb-2">
               <div className="space-y-1">
-                <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-orange-50 border border-orange-200/60 text-slate-700 text-xs shadow-2xs">
-                  <span className="w-1.5 h-1.5 rounded-full bg-orange-500 animate-pulse"></span>
-                  <span className="font-mono text-xs font-bold tracking-wide text-orange-700">DC-NORTH-01</span>
-                  <span className="text-slate-300">/</span>
-                  <span className="font-medium text-slate-700">LOGISTICS DISPATCH & INTAKE • Live WMS Workflow Active</span>
-                </div>
                 <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">
                   Warehouse Stock Operations
                 </h1>

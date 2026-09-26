@@ -3,7 +3,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from sqlalchemy import text
 
-from app.database import get_db, Base, engine
+from app.database import get_db, Base, engine, SessionLocal
+from app.seed import seed_database
 import app.models  # load all models into Base.metadata
 from app.routers.auth import router as auth_router, google_auth
 from app.routers.dashboard import router as dashboard_router
@@ -18,12 +19,18 @@ from app.schemas.auth import TokenResponse
 # Create tables in Neon PostgreSQL database
 Base.metadata.create_all(bind=engine)
 
-# Safely migrate existing users table schema in Neon
+# Safely migrate existing users table schema in Neon & Seed database
 try:
     with engine.connect() as conn:
         conn.execute(text("ALTER TABLE users ADD COLUMN IF NOT EXISTS auth_provider VARCHAR DEFAULT 'email';"))
         conn.execute(text("ALTER TABLE users ALTER COLUMN password_hash DROP NOT NULL;"))
         conn.commit()
+
+    db_session = SessionLocal()
+    try:
+        seed_database(db_session)
+    finally:
+        db_session.close()
 except Exception as e:
     print(f"Database schema check notice: {e}")
 

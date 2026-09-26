@@ -242,9 +242,9 @@ export default function StockLedger() {
         {/* ============================================================ */}
         <div className="flex-1 flex flex-col min-w-0 overflow-hidden relative">
           {/* Sticky Top Header Bar */}
-          <header className="sticky top-0 z-20 bg-white/95 backdrop-blur-md border-b border-slate-200/80 px-6 py-2.5 flex items-center justify-between gap-4">
-            {/* Left: Warehouse Switcher */}
-            <div className="flex items-center gap-3">
+          <header className="sticky top-0 z-20 bg-white/95 backdrop-blur-md border-b border-slate-200/80 px-4 sm:px-6 py-2.5 flex items-center justify-between gap-4">
+            {/* Left: Mobile Toggle & Left-Aligned Search Bar */}
+            <div className="flex items-center gap-3 flex-1 max-w-2xl">
               <button
                 onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
                 className="lg:hidden p-2 text-slate-600 hover:bg-slate-100 rounded-xl"
@@ -253,19 +253,7 @@ export default function StockLedger() {
                 <span className="material-symbols-outlined text-[22px]">menu</span>
               </button>
 
-              <button
-                className="inline-flex items-center gap-2 bg-slate-50 hover:bg-slate-100 border border-slate-200/90 rounded-xl px-3 py-1.5 text-xs font-semibold text-slate-800 transition"
-                type="button"
-              >
-                <span className="material-symbols-outlined text-orange-600 text-[18px]">warehouse</span>
-                <span>Main Warehouse - Floor 1</span>
-                <span className="material-symbols-outlined text-slate-400 text-[16px]">expand_more</span>
-              </button>
-            </div>
-
-            {/* Center: Command Palette Search */}
-            <div className="flex-1 max-w-md hidden md:block">
-              <div className="relative flex items-center">
+              <div className="relative flex items-center flex-1">
                 <span className="material-symbols-outlined text-slate-400 text-[18px] absolute left-3 pointer-events-none">
                   search
                 </span>
@@ -273,58 +261,25 @@ export default function StockLedger() {
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search SKU, move reference, bin, lot hash..."
-                  className="w-full bg-slate-50 border border-slate-200 focus:border-orange-500 focus:ring-1 focus:ring-orange-500 rounded-xl pl-9 pr-12 py-1.5 text-xs placeholder:text-slate-400 font-normal transition text-slate-700"
+                  placeholder="Search SKU, operation reference, vendor..."
+                  className="w-full bg-slate-100/80 border border-slate-200/80 focus:bg-white focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 rounded-xl pl-9 pr-12 py-2 text-xs text-slate-800 placeholder:text-slate-400 font-normal transition outline-none"
                 />
-                <kbd className="absolute right-2.5 px-1.5 py-0.5 text-[10px] font-mono font-medium text-slate-400 bg-white border border-slate-200 rounded shadow-2xs pointer-events-none">
+                <kbd className="absolute right-2.5 px-1.5 py-0.5 text-[10px] font-mono font-medium text-slate-400 bg-white border border-slate-200/80 rounded shadow-2xs pointer-events-none">
                   ⌘K
                 </kbd>
               </div>
             </div>
 
-            {/* Right: Status Signals, Notifications, Avatar, Primary Action */}
-            <div className="flex items-center gap-3">
-              {/* Ledger Synced Signal Badge */}
-              <div className="hidden sm:inline-flex items-center gap-1.5 bg-emerald-50 text-emerald-700 border border-emerald-200/80 text-xs px-3 py-1 rounded-full font-medium shadow-2xs">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 crypto-pulse-dot"></span>
-                <span>Ledger Synced (SHA-256 Verified)</span>
-              </div>
-
-              {/* Live Stream */}
-              <div className="hidden lg:flex items-center gap-1.5 text-xs text-slate-500 font-medium px-2 py-1">
-                <span className="text-orange-500 font-mono text-xs">((•))</span>
-                <span>Live Audit Stream</span>
-              </div>
-
-              {/* Notification Bell */}
-              <button
-                className="relative p-2 text-slate-500 hover:text-slate-800 hover:bg-slate-50 rounded-xl transition"
-                type="button"
-                onClick={() => showToast('3 Recent blocks cryptographically validated into ledger.')}
-                title="Notifications"
-              >
-                <span className="material-symbols-outlined text-[20px]">notifications</span>
-                <span className="absolute top-1.5 right-1.5 w-4 h-4 bg-orange-600 text-[10px] font-bold text-white rounded-full flex items-center justify-center">
-                  3
-                </span>
-              </button>
-
-              {/* User Avatar */}
-              <div className="flex items-center gap-2 pl-1 border-l border-slate-200">
-                <div className="w-8 h-8 rounded-full bg-slate-900 text-white font-bold text-xs flex items-center justify-center ring-2 ring-slate-100">
-                  AM
-                </div>
-              </div>
-
-              {/* Primary CTA Button */}
+            {/* Right: Primary Action */}
+            <div className="flex items-center gap-3 shrink-0">
               <button
                 id="openAddLocationBtn"
                 onClick={() => setDrawerOpen(true)}
-                className="bg-orange-600 hover:bg-orange-700 active:bg-orange-800 text-white text-xs font-semibold px-3.5 py-2 rounded-xl shadow-xs transition flex items-center gap-1.5 cursor-pointer ml-1 active:scale-95 shadow-orange-600/20"
+                className="bg-orange-600 hover:bg-orange-700 active:bg-orange-800 text-white text-xs font-semibold px-3.5 py-2 rounded-xl shadow-xs transition flex items-center gap-1.5 cursor-pointer active:scale-95 shadow-orange-600/20"
                 type="button"
               >
                 <span className="material-symbols-outlined text-[18px]">add</span>
-                <span>+ Add Location / Node</span>
+                <span>Add Location / Node</span>
               </button>
             </div>
           </header>
@@ -336,12 +291,6 @@ export default function StockLedger() {
             {/* Page Heading & Integrity Actions */}
             <section className="flex flex-col md:flex-row md:items-end justify-between gap-4">
               <div className="space-y-1.5">
-                <div className="inline-flex items-center gap-2 text-xs font-semibold px-3 py-1 rounded-full bg-orange-50 text-orange-700 border border-orange-200/80">
-                  <span className="w-1.5 h-1.5 rounded-full bg-orange-500"></span>
-                  <span>IMMUTABLE LEDGER & FACILITY TOPOLOGY</span>
-                  <span className="text-orange-300">•</span>
-                  <span className="font-mono text-[11px] text-orange-600">WMS Node Active</span>
-                </div>
                 <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">
                   Stock Ledger & Facility Infrastructure
                 </h1>
@@ -371,302 +320,30 @@ export default function StockLedger() {
               </div>
             </section>
 
-            {/* ============================================================ */}
-            {/* Audit KPI Cards Row                                         */}
-            {/* ============================================================ */}
-            <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              {/* Card 1: Total Recorded Moves */}
-              <div className="ledger-kpi-card bg-white rounded-2xl border border-slate-200/90 p-5 shadow-xs flex flex-col justify-between">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-medium text-slate-500 uppercase tracking-wider">Total Recorded Moves</span>
-                  <span className="text-xs px-2 py-0.5 rounded-full font-medium bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center gap-1 font-mono">
-                    <span className="w-1 h-1 rounded-full bg-emerald-500"></span> 100% Hash Valid
-                  </span>
-                </div>
-                <div className="mt-3">
-                  <div className="text-2xl font-bold text-slate-900 tracking-tight">142 Today</div>
-                  <p className="text-xs text-slate-500 mt-1">Zero discrepancies detected in audit chain</p>
-                </div>
-                <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-400">
-                  <span>Last ledger write: 48s ago</span>
-                  <span className="font-mono text-slate-600">Block #9,481,203</span>
-                </div>
+            {/* Dynamic 3 KPI Summary Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
+                <div className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">TOTAL MOVEMENT LOGS</div>
+                <div className="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1.5">{ledgerMoves.length} Logged Moves</div>
+                <div className="text-xs text-slate-500 mt-1">Real-time ledger audit trail</div>
               </div>
 
-              {/* Card 2: Active Storage Bins */}
-              <div className="ledger-kpi-card bg-white rounded-2xl border border-slate-200/90 p-5 shadow-xs flex flex-col justify-between">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-medium text-slate-500 uppercase tracking-wider">Active Storage Bins</span>
-                  <span className="text-[11px] font-semibold text-slate-600 bg-slate-100 px-2 py-0.5 rounded-md">88% Capacity</span>
+              <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
+                <div className="text-[11px] font-bold text-emerald-600 uppercase tracking-wider">RECEIPTS & TRANSFERS</div>
+                <div className="text-2xl sm:text-3xl font-extrabold text-emerald-600 mt-1.5">
+                  {ledgerMoves.filter((m) => m.type === 'Receipt' || m.type === 'Transfer').length} Inbound / Move
                 </div>
-                <div className="mt-3">
-                  <div className="text-2xl font-bold text-slate-900 tracking-tight">384 Bins</div>
-                  <p className="text-xs text-slate-500 mt-1">Across 2 Warehouse Depots (88% fill)</p>
-                </div>
-                <div className="mt-4 pt-3 border-t border-slate-100">
-                  <div className="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
-                    <div className="bg-orange-500 h-1.5 rounded-full" style={{ width: '88%' }}></div>
-                  </div>
-                </div>
+                <div className="text-xs text-slate-500 mt-1">Stock intake & internal relocations</div>
               </div>
 
-              {/* Card 3: Net Inbound Volume */}
-              <div className="ledger-kpi-card bg-white rounded-2xl border border-slate-200/90 p-5 shadow-xs flex flex-col justify-between">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-medium text-slate-500 uppercase tracking-wider">Net Inbound Volume</span>
-                  <span className="text-[11px] px-2 py-0.5 rounded-md font-medium bg-emerald-50 text-emerald-700 border border-emerald-100">
-                    Intake reconciled
-                  </span>
+              <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
+                <div className="text-[11px] font-bold text-purple-600 uppercase tracking-wider">DISPATCH & ADJUSTMENTS</div>
+                <div className="text-2xl sm:text-3xl font-extrabold text-purple-600 mt-1.5">
+                  {ledgerMoves.filter((m) => m.type === 'Delivery' || m.type === 'Adjustment').length} Outbound / Reconciled
                 </div>
-                <div className="mt-3">
-                  <div className="text-2xl font-bold text-emerald-600 tracking-tight">+1,450 Units</div>
-                  <p className="text-xs text-slate-500 mt-1">12 PO Receipts processed today</p>
-                </div>
-                <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500">
-                  <span className="flex items-center gap-1 text-emerald-700 font-medium">
-                    <span className="material-symbols-outlined text-[14px]">arrow_upward</span>
-                    +6.2% vs yesterday
-                  </span>
-                  <span>Dock #01-#03 active</span>
-                </div>
+                <div className="text-xs text-slate-500 mt-1">Dispatch shipments & cycle count variances</div>
               </div>
-
-              {/* Card 4: Net Outbound Dispatch */}
-              <div className="ledger-kpi-card bg-white rounded-2xl border border-slate-200/90 p-5 shadow-xs flex flex-col justify-between">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-medium text-slate-500 uppercase tracking-wider">Net Outbound Dispatch</span>
-                  <span className="text-[11px] px-2 py-0.5 rounded-md font-medium bg-purple-50 text-purple-700 border border-purple-100">
-                    Fulfilled & decremented
-                  </span>
-                </div>
-                <div className="mt-3">
-                  <div className="text-2xl font-bold text-purple-600 tracking-tight">-820 Units</div>
-                  <p className="text-xs text-slate-500 mt-1">24 Shipments dispatched to carriers</p>
-                </div>
-                <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500">
-                  <span className="flex items-center gap-1 text-purple-700 font-medium">
-                    <span className="material-symbols-outlined text-[14px]">arrow_downward</span>
-                    9 picking in stage
-                  </span>
-                  <span>Cutoff: 16:00 EST</span>
-                </div>
-              </div>
-            </section>
-
-            {/* ============================================================ */}
-            {/* Facility Infrastructure Section (Warehouse & Sub-Locations) */}
-            {/* ============================================================ */}
-            <section className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-              {/* Card 1: Warehouse Facilities & Nodes */}
-              <div className="facility-card bg-white rounded-2xl border border-slate-200 p-6 shadow-xs flex flex-col justify-between space-y-5">
-                <div>
-                  <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-                    <div className="flex items-center gap-2.5">
-                      <div className="w-8 h-8 rounded-xl bg-orange-100/70 text-orange-700 flex items-center justify-center font-bold text-sm">
-                        <span className="material-symbols-outlined text-[20px] text-orange-600">domain</span>
-                      </div>
-                      <div>
-                        <h3 className="text-sm font-bold text-slate-900">Warehouse Facilities & Nodes</h3>
-                        <p className="text-xs text-slate-500">Primary physical logistics centers</p>
-                      </div>
-                    </div>
-                    <span className="text-xs font-mono text-slate-400 bg-slate-50 border border-slate-200 px-2 py-0.5 rounded-md">
-                      2 Facilities
-                    </span>
-                  </div>
-
-                  {/* Node 1: Main Distribution Center */}
-                  <div className="mt-4 p-4 rounded-xl border border-slate-200/80 bg-slate-50/60 hover:bg-slate-50 transition">
-                    <div className="flex items-start justify-between">
-                      <div>
-                        <div className="flex items-center gap-2">
-                          <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
-                          <h4 className="text-xs font-bold text-slate-900">Main Distribution Center (DC-North-01)</h4>
-                          <span className="text-[10px] font-semibold bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full">
-                            Primary Intake Node
-                          </span>
-                        </div>
-                        <p className="text-[11px] text-slate-500 mt-1">104 Logistics Parkway, Building A • RFID Gate Array</p>
-                      </div>
-                      <span className="text-xs font-mono font-bold text-slate-800">92%</span>
-                    </div>
-                    {/* Capacity Bar */}
-                    <div className="w-full bg-slate-200 rounded-full h-1.5 mt-3 overflow-hidden">
-                      <div className="bg-emerald-600 h-1.5 rounded-full" style={{ width: '92%' }}></div>
-                    </div>
-                    {/* Attributes Badges */}
-                    <div className="flex flex-wrap gap-2 mt-3 text-[11px] text-slate-600">
-                      <span className="bg-white border border-slate-200 rounded-md px-2 py-0.5 font-medium">4 Floors</span>
-                      <span className="bg-white border border-slate-200 rounded-md px-2 py-0.5 font-medium">18 Docks</span>
-                      <span className="bg-white border border-slate-200 rounded-md px-2 py-0.5 font-medium">92% Utilization</span>
-                      <span className="bg-emerald-50 border border-emerald-200 text-emerald-700 rounded-md px-2 py-0.5 font-medium">
-                        Temperature: 18°C Controlled
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Node 2: Chicago South Depot */}
-                  <div className="mt-3 p-4 rounded-xl border border-slate-200/80 bg-slate-50/60 hover:bg-slate-50 transition">
-                    <div className="flex items-start justify-between">
-                      <div>
-                        <div className="flex items-center gap-2">
-                          <span className="w-2 h-2 rounded-full bg-blue-500"></span>
-                          <h4 className="text-xs font-bold text-slate-900">Chicago South Depot (Hub 04)</h4>
-                          <span className="text-[10px] font-semibold bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full">
-                            Cold Storage + HazMat
-                          </span>
-                        </div>
-                        <p className="text-[11px] text-slate-500 mt-1">4500 Western Ave, Deep Bay • Sensor Node #08</p>
-                      </div>
-                      <span className="text-xs font-mono font-bold text-slate-800">74%</span>
-                    </div>
-                    {/* Capacity Bar */}
-                    <div className="w-full bg-slate-200 rounded-full h-1.5 mt-3 overflow-hidden">
-                      <div className="bg-blue-600 h-1.5 rounded-full" style={{ width: '74%' }}></div>
-                    </div>
-                    {/* Attributes Badges */}
-                    <div className="flex flex-wrap gap-2 mt-3 text-[11px] text-slate-600">
-                      <span className="bg-white border border-slate-200 rounded-md px-2 py-0.5 font-medium">2 Floors</span>
-                      <span className="bg-white border border-slate-200 rounded-md px-2 py-0.5 font-medium">8 Docks</span>
-                      <span className="bg-white border border-slate-200 rounded-md px-2 py-0.5 font-medium">74% Utilization</span>
-                      <span className="bg-blue-50 border border-blue-200 text-blue-700 rounded-md px-2 py-0.5 font-medium">
-                        Cold Chain: -20°C Certified
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex items-center justify-between text-xs pt-2">
-                  <span className="text-slate-500">All nodes reporting heartbeat signal</span>
-                  <button
-                    onClick={() => showToast('Topology graph loaded for 2 active facilities.')}
-                    className="text-orange-600 font-semibold hover:text-orange-700 inline-flex items-center gap-1 cursor-pointer"
-                    type="button"
-                  >
-                    Manage Topology →
-                  </button>
-                </div>
-              </div>
-
-              {/* Card 2: Internal Sub-Locations & Bins (Realtime Occupancy) */}
-              <div className="facility-card bg-white rounded-2xl border border-slate-200 p-6 shadow-xs flex flex-col justify-between space-y-5">
-                <div>
-                  <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-                    <div className="flex items-center gap-2.5">
-                      <div className="w-8 h-8 rounded-xl bg-purple-100/70 text-purple-700 flex items-center justify-center font-bold text-sm">
-                        <span className="material-symbols-outlined text-[20px] text-purple-600">shelves</span>
-                      </div>
-                      <div>
-                        <h3 className="text-sm font-bold text-slate-900">Internal Sub-Locations & Bins</h3>
-                        <p className="text-xs text-slate-500">Live zone mapping & capacity allocation</p>
-                      </div>
-                    </div>
-                    <span className="text-xs font-mono text-slate-400 bg-slate-50 border border-slate-200 px-2 py-0.5 rounded-md">
-                      Realtime Occupancy
-                    </span>
-                  </div>
-
-                  {/* Interactive Zone Chips */}
-                  <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    {/* Zone 1 */}
-                    <div
-                      onClick={() => showToast('Filtered to Bay North #03 live pallets.')}
-                      className="zone-item-card p-3 rounded-xl bg-white cursor-pointer group"
-                    >
-                      <div className="flex items-center justify-between">
-                        <span className="font-mono text-xs font-bold text-slate-900 group-hover:text-orange-600">
-                          Bay North #03
-                        </span>
-                        <span className="text-[10px] font-bold text-amber-700 bg-amber-50 px-1.5 py-0.5 rounded">
-                          18 Pallets
-                        </span>
-                      </div>
-                      <p className="text-[11px] text-slate-500 mt-1">Vendor Intake • High velocity buffer</p>
-                      <div className="mt-2.5 flex items-center justify-between text-[10px] text-slate-400">
-                        <span>Gate 1-3 Active</span>
-                        <span className="text-emerald-600 font-medium">Ready for Putaway</span>
-                      </div>
-                    </div>
-
-                    {/* Zone 2 */}
-                    <div
-                      onClick={() => showToast('Filtered to Rack A -> Rack B aisle inventory.')}
-                      className="zone-item-card p-3 rounded-xl bg-white cursor-pointer group"
-                    >
-                      <div className="flex items-center justify-between">
-                        <span className="font-mono text-xs font-bold text-slate-900 group-hover:text-orange-600">
-                          Rack A → Rack B
-                        </span>
-                        <span className="text-[10px] font-bold text-blue-700 bg-blue-50 px-1.5 py-0.5 rounded">
-                          64 SKUs
-                        </span>
-                      </div>
-                      <p className="text-[11px] text-slate-500 mt-1">Production Buffer • Fast-access aisle</p>
-                      <div className="mt-2.5 flex items-center justify-between text-[10px] text-slate-400">
-                        <span>Floor 1 - Section 4</span>
-                        <span className="text-slate-600 font-medium">81% Staged</span>
-                      </div>
-                    </div>
-
-                    {/* Zone 3 */}
-                    <div
-                      onClick={() => showToast('Warning: Bin B-18-04 is at 94% capacity.')}
-                      className="zone-item-card p-3 rounded-xl bg-white cursor-pointer group"
-                    >
-                      <div className="flex items-center justify-between">
-                        <span className="font-mono text-xs font-bold text-slate-900 group-hover:text-orange-600">
-                          Bin B-18-04
-                        </span>
-                        <span className="text-[10px] font-bold text-rose-700 bg-rose-50 px-1.5 py-0.5 rounded">
-                          94% Full
-                        </span>
-                      </div>
-                      <p className="text-[11px] text-slate-500 mt-1">Fast-Moving Pick Face • Stainless Rods</p>
-                      <div className="mt-2.5 flex items-center justify-between text-[10px] text-slate-400">
-                        <span>Rack Level 2</span>
-                        <span className="text-rose-600 font-semibold">Near Threshold</span>
-                      </div>
-                    </div>
-
-                    {/* Zone 4 */}
-                    <div
-                      onClick={() => showToast('Assembly Line 2 Kanban buffer active.')}
-                      className="zone-item-card p-3 rounded-xl bg-white cursor-pointer group"
-                    >
-                      <div className="flex items-center justify-between">
-                        <span className="font-mono text-xs font-bold text-slate-900 group-hover:text-orange-600">
-                          Assembly Line 2
-                        </span>
-                        <span className="text-[10px] font-bold text-purple-700 bg-purple-50 px-1.5 py-0.5 rounded">
-                          Kanban Active
-                        </span>
-                      </div>
-                      <p className="text-[11px] text-slate-500 mt-1">Work-in-Progress Floor • Sub-assembly</p>
-                      <div className="mt-2.5 flex items-center justify-between text-[10px] text-slate-400">
-                        <span>Sensor Auto-Count</span>
-                        <span className="text-emerald-600 font-medium">Supplies Normal</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Heatmap Occupancy Status Legend */}
-                <div className="p-3 bg-slate-50 rounded-xl border border-slate-200/80 flex items-center justify-between text-xs">
-                  <span className="text-slate-600 font-medium">Bin Rack Occupancy Spectrum:</span>
-                  <div className="flex items-center gap-3 text-[11px] text-slate-500 font-medium">
-                    <span className="flex items-center gap-1">
-                      <span className="w-2.5 h-2.5 rounded-sm bg-emerald-500"></span> &lt; 70%
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <span className="w-2.5 h-2.5 rounded-sm bg-amber-400"></span> 70–90%
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <span className="w-2.5 h-2.5 rounded-sm bg-rose-500"></span> &gt; 90%
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </section>
+            </div>
 
             {/* ============================================================ */}
             {/* Immutable Stock Movement Ledger Table Section                */}

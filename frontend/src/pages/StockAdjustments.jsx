@@ -160,47 +160,43 @@ export default function StockAdjustments() {
 
         {/* Workspace */}
         <div className="flex-1 flex flex-col min-w-0 overflow-hidden relative">
-          <header className="h-16 bg-white border-b border-slate-200 px-6 flex items-center justify-between flex-shrink-0 z-20">
-            <div className="flex items-center gap-3">
+          <header className="h-16 bg-white border-b border-slate-200 px-4 sm:px-6 flex items-center justify-between gap-4 flex-shrink-0 z-20">
+            <div className="flex items-center gap-3 flex-1 max-w-2xl">
               <button onClick={() => setSidebarCollapsed(!sidebarCollapsed)} className="lg:hidden p-2 text-slate-600 hover:bg-slate-100 rounded-xl">
                 <span className="material-symbols-outlined text-[22px]">menu</span>
               </button>
-              <div className="flex items-center gap-2 px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-700">
-                <span className="material-symbols-outlined text-rose-600 text-[18px]">tune</span>
-                <span>Physical Count & Inventory Reconciliation</span>
+              <div className="relative flex items-center flex-1">
+                <span className="material-symbols-outlined text-slate-400 text-[18px] absolute left-3 pointer-events-none">
+                  search
+                </span>
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search audit ref, SKU, location..."
+                  className="w-full bg-slate-100/80 border border-slate-200/80 focus:bg-white focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 rounded-xl pl-9 pr-12 py-2 text-xs text-slate-800 placeholder:text-slate-400 font-normal transition outline-none"
+                />
+                <kbd className="absolute right-2.5 px-1.5 py-0.5 text-[10px] font-mono font-medium text-slate-400 bg-white border border-slate-200/80 rounded shadow-2xs pointer-events-none">
+                  ⌘K
+                </kbd>
               </div>
             </div>
 
-            <div className="hidden md:flex relative w-[360px]">
-              <span className="material-symbols-outlined text-[18px] text-slate-400 absolute left-3 top-2 pointer-events-none">search</span>
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search audit ref, SKU, location..."
-                className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-9 pr-3 py-1.5 text-xs text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-orange-500"
-              />
-            </div>
-
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 shrink-0">
               <button
                 onClick={() => setDrawerOpen(true)}
                 className="bg-orange-600 hover:bg-orange-700 text-white font-semibold text-xs px-4 py-2 rounded-xl shadow-xs flex items-center gap-1.5 transition shadow-orange-500/20 active:scale-95"
                 type="button"
               >
                 <span className="material-symbols-outlined text-[18px]">add</span>
-                <span>+ Log Stock Adjustment</span>
+                <span>Log Stock Adjustment</span>
               </button>
             </div>
           </header>
 
           <main className="flex-1 overflow-y-auto px-6 lg:px-8 py-6 space-y-6">
             <div>
-              <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-rose-50 border border-rose-200 text-rose-700 text-xs font-semibold">
-                <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse"></span>
-                <span>AUDIT DISCREPANCY MANAGEMENT</span>
-              </div>
-              <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight mt-1">
+              <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">
                 Stock Adjustments & Physical Count
               </h1>
               <p className="text-xs text-slate-500">

@@ -200,84 +200,84 @@ export default function InternalTransfers() {
       <div className={`flex-1 flex flex-col min-w-0 transition-all duration-300 ease-in-out ${sidebarCollapsed ? 'lg:pl-[76px]' : 'lg:pl-64'}`}>
         {/* Workspace */}
         <div className="flex-1 flex flex-col min-w-0 overflow-hidden relative">
-          <header className="h-16 bg-white border-b border-slate-200 px-6 flex items-center justify-between flex-shrink-0 z-20">
-            <div className="flex items-center gap-3">
+          <header className="h-16 bg-white border-b border-slate-200 px-4 sm:px-6 flex items-center justify-between gap-4 flex-shrink-0 z-20">
+            <div className="flex items-center gap-3 flex-1 max-w-2xl">
               <button onClick={() => setSidebarCollapsed(!sidebarCollapsed)} className="lg:hidden p-2 text-slate-600 hover:bg-slate-100 rounded-xl">
                 <span className="material-symbols-outlined text-[22px]">menu</span>
               </button>
-              <div className="flex items-center gap-2 px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-700">
-                <span className="material-symbols-outlined text-blue-600 text-[18px]">swap_horiz</span>
-                <span>Intra-Warehouse & Inter-Facility Movements</span>
+              <div className="relative flex items-center flex-1">
+                <span className="material-symbols-outlined text-slate-400 text-[18px] absolute left-3 pointer-events-none">
+                  search
+                </span>
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search transfer ref, SKU, location..."
+                  className="w-full bg-slate-100/80 border border-slate-200/80 focus:bg-white focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 rounded-xl pl-9 pr-12 py-2 text-xs text-slate-800 placeholder:text-slate-400 font-normal transition outline-none"
+                />
+                <kbd className="absolute right-2.5 px-1.5 py-0.5 text-[10px] font-mono font-medium text-slate-400 bg-white border border-slate-200/80 rounded shadow-2xs pointer-events-none">
+                  ⌘K
+                </kbd>
               </div>
             </div>
 
-            <div className="hidden md:flex relative w-[360px]">
-              <span className="material-symbols-outlined text-[18px] text-slate-400 absolute left-3 top-2 pointer-events-none">search</span>
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search transfer ref, SKU, location..."
-                className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-9 pr-3 py-1.5 text-xs text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-orange-500"
-              />
-            </div>
-
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 shrink-0">
               <button
                 onClick={() => setDrawerOpen(true)}
                 className="bg-orange-600 hover:bg-orange-700 text-white font-semibold text-xs px-4 py-2 rounded-xl shadow-xs flex items-center gap-1.5 transition shadow-orange-500/20 active:scale-95"
                 type="button"
               >
                 <span className="material-symbols-outlined text-[18px]">add</span>
-                <span>+ New Internal Transfer</span>
+                <span>New Internal Transfer</span>
               </button>
             </div>
           </header>
 
-          <main className="flex-1 overflow-y-auto px-6 lg:px-8 py-6 space-y-6">
-            <div>
-              <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-blue-50 border border-blue-200 text-blue-700 text-xs font-semibold">
-                <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse"></span>
-                <span>INTERNAL INVENTORY TRANSIT</span>
+          <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 max-w-[1600px] mx-auto w-full space-y-6">
+            {/* Page Title Banner */}
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div>
+                <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+                  Internal Transfers
+                </h1>
+                <p className="text-xs sm:text-sm text-slate-500 mt-1">
+                  Move stock between internal locations (e.g. Main Store → Production Rack, Rack A → Rack B). Total inventory remains unchanged while bin locations update.
+                </p>
               </div>
-              <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight mt-1">
-                Internal Transfers
-              </h1>
-              <p className="text-xs text-slate-500">
-                Move stock between internal locations (e.g. Main Store → Production Rack, Rack A → Rack B, Warehouse 1 → Warehouse 2). Stock remains unchanged in total, but location inventory updates in real time.
-              </p>
+              <div className="flex items-center gap-2.5 flex-wrap">
+                <button
+                  onClick={() => fetchTransfers()}
+                  className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-white hover:bg-slate-50 border border-slate-200/90 rounded-xl text-xs font-semibold text-slate-700 shadow-xs transition-colors cursor-pointer"
+                >
+                  <span className="material-symbols-outlined text-base text-slate-500">sync</span>
+                  Sync API Data
+                </button>
+              </div>
             </div>
 
-            {/* Quick Example Card (as required in problem statement) */}
+            {/* 3 KPI Summary Cards */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-sm flex items-start gap-3">
-                <div className="w-9 h-9 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center flex-shrink-0">
-                  <span className="material-symbols-outlined text-[20px]">warehouse</span>
-                </div>
-                <div>
-                  <div className="text-xs font-bold text-slate-800">Main Store → Production Rack</div>
-                  <p className="text-[11px] text-slate-500 mt-0.5">Buffer replenishment for active assembly lines</p>
-                </div>
+              <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
+                <div className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">TOTAL INTERNAL TRANSFERS</div>
+                <div className="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1.5">{transfers.length} Transfers</div>
+                <div className="text-xs text-slate-500 mt-1">Database registered bin moves</div>
               </div>
 
-              <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-sm flex items-start gap-3">
-                <div className="w-9 h-9 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center flex-shrink-0">
-                  <span className="material-symbols-outlined text-[20px]">shelves</span>
+              <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
+                <div className="text-[11px] font-bold text-orange-500 uppercase tracking-wider">READY / IN-TRANSIT</div>
+                <div className="text-2xl sm:text-3xl font-extrabold text-orange-600 mt-1.5">
+                  {transfers.filter((t) => t.status === 'Ready' || t.status === 'In-Transit' || t.status === 'ready').length} Active
                 </div>
-                <div>
-                  <div className="text-xs font-bold text-slate-800">Rack A → Rack B</div>
-                  <p className="text-[11px] text-slate-500 mt-0.5">Fast-access pick-face aisle rebalancing</p>
-                </div>
+                <div className="text-xs text-slate-500 mt-1">Awaiting relocation completion</div>
               </div>
 
-              <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-sm flex items-start gap-3">
-                <div className="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center flex-shrink-0">
-                  <span className="material-symbols-outlined text-[20px]">local_shipping</span>
+              <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
+                <div className="text-[11px] font-bold text-emerald-600 uppercase tracking-wider">COMPLETED MOVES</div>
+                <div className="text-2xl sm:text-3xl font-extrabold text-emerald-600 mt-1.5">
+                  {transfers.filter((t) => t.status === 'Done' || t.status === 'done').length} Relocated
                 </div>
-                <div>
-                  <div className="text-xs font-bold text-slate-800">Warehouse 1 → Warehouse 2</div>
-                  <p className="text-[11px] text-slate-500 mt-0.5">Inter-facility transfers between regional depots</p>
-                </div>
+                <div className="text-xs text-slate-500 mt-1">Location stock updated in ledger</div>
               </div>
             </div>
 
@@ -298,7 +298,6 @@ export default function InternalTransfers() {
                   </button>
                 ))}
               </div>
-              <span className="text-xs font-mono text-slate-500">Ledger delta: <strong>0 kg (Internal)</strong></span>
             </div>
 
             {/* Table */}
@@ -325,9 +324,9 @@ export default function InternalTransfers() {
                           <div className="font-medium text-slate-900">{t.item}</div>
                           <div className="font-mono text-[11px] text-slate-400">{t.sku}</div>
                         </td>
-                        <td className="py-3 px-4 font-mono text-slate-600">{t.source}</td>
-                        <td className="py-3 px-4 font-mono font-bold text-slate-900">{t.dest}</td>
-                        <td className="py-3 px-4 font-mono font-bold text-blue-600">
+                        <td className="py-3 px-4 font-medium text-slate-700">{t.source}</td>
+                        <td className="py-3 px-4 font-semibold text-slate-900">{t.dest}</td>
+                        <td className="py-3 px-4 font-semibold text-blue-600">
                           {t.qty} {t.uom}
                         </td>
                         <td className="py-3 px-4 text-slate-700">{t.operator}</td>

@@ -214,10 +214,6 @@ export default function DeliveryOrders() {
           {/* Page Title Banner */}
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
-              <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-md bg-slate-100 border border-slate-200 text-slate-700 font-mono text-[11px] mb-2 font-medium">
-                <span className="w-1.5 h-1.5 rounded-full bg-orange-500" />
-                NEON-DB DISPATCH &bull; LIVE API
-              </div>
               <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
                 Delivery Orders (Outgoing Shipments)
               </h1>

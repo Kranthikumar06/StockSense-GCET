@@ -163,18 +163,14 @@ export default function WarehousesSettings() {
                 type="button"
               >
                 <span className="material-symbols-outlined text-[18px]">add</span>
-                <span>+ Add Warehouse Facility</span>
+                <span>Add Warehouse Facility</span>
               </button>
             </div>
           </header>
 
           <main className="flex-1 overflow-y-auto px-6 lg:px-8 py-6 space-y-6">
             <div>
-              <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-orange-50 border border-orange-200 text-orange-700 text-xs font-semibold">
-                <span className="w-1.5 h-1.5 rounded-full bg-orange-500"></span>
-                <span>MULTI-WAREHOUSE INFRASTRUCTURE & SETTINGS</span>
-              </div>
-              <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight mt-1">
+              <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">
                 Warehouses & Settings
               </h1>
               <p className="text-xs text-slate-500">

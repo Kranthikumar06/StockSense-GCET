@@ -1,134 +1,94 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import StockSenseLogo from '../components/StockSenseLogo';
 import Sidebar, { useSidebarState } from '../components/Sidebar';
 
-const API_URL = 'http://localhost:8000/api/dashboard';
+const API_BASE = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000';
 
 export default function Dashboard() {
   const [sidebarCollapsed, setSidebarCollapsed] = useSidebarState();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
-  const [sidebarSearch, setSidebarSearch] = useState('');
-  const [selectedWarehouse, setSelectedWarehouse] = useState('wh-1');
+  const [selectedWarehouse, setSelectedWarehouse] = useState('All');
+  const [selectedStatus, setSelectedStatus] = useState('All');
+  const [selectedCategory, setSelectedCategory] = useState('All');
 
-  // Sample operations data from Stitch design
-  const operationsData = [
-    {
-      id: 'WH/IN/00042',
-      type: 'Receipt',
-      typeIcon: 'move_to_inbox',
-      typeColor: 'text-amber-600 bg-amber-50',
-      partner: 'Tata Steel Ltd',
-      partnerSub: 'PO-2023-8891',
-      date: 'Today, 09:30 AM',
-      dateSub: 'Dock Gate #2',
-      dateAlert: true,
-      units: '450 EA',
-      status: 'Waiting',
-      statusColor: 'bg-amber-100 text-amber-800 animate-pulse',
-    },
-    {
-      id: 'WH/OUT/00118',
-      type: 'Delivery',
-      typeIcon: 'local_shipping',
-      typeColor: 'text-orange-600 bg-orange-50',
-      partner: 'Acme Retail Corp',
-      partnerSub: 'SO-99214-US',
-      date: 'Today, 11:15 AM',
-      dateSub: 'Standard Logistics',
-      dateAlert: false,
-      units: '1,200 EA',
-      status: 'Ready',
-      statusColor: 'bg-emerald-100 text-emerald-800',
-    },
-    {
-      id: 'WH/INT/00094',
-      type: 'Transfer',
-      typeIcon: 'swap_horiz',
-      typeColor: 'text-slate-600 bg-slate-100',
-      partner: 'Internal Bay A → Assembly B',
-      partnerSub: 'Forklift Route #4',
-      date: 'Today, 12:00 PM',
-      dateSub: 'Internal Request',
-      dateAlert: false,
-      units: '80 EA',
-      status: 'Ready',
-      statusColor: 'bg-emerald-100 text-emerald-800',
-    },
-    {
-      id: 'WH/ADJ/00015',
-      type: 'Adjustment',
-      typeIcon: 'tune',
-      typeColor: 'text-rose-600 bg-rose-50',
-      partner: 'Cold Storage Rack C-04',
-      partnerSub: 'Cycle Count Audit #12',
-      date: 'Yesterday, 17:40',
-      dateSub: 'Manager Override',
-      dateAlert: false,
-      units: '-12 EA',
-      unitsAlert: true,
-      status: 'Done',
-      statusColor: 'bg-slate-100 text-slate-700',
-    },
-    {
-      id: 'WH/IN/00043',
-      type: 'Receipt',
-      typeIcon: 'move_to_inbox',
-      typeColor: 'text-amber-600 bg-amber-50',
-      partner: 'Apex Global Components',
-      partnerSub: 'PO-2023-9002',
-      date: 'Today, 14:00 PM',
-      dateSub: 'Priority Air Freight',
-      dateAlert: false,
-      units: '340 EA',
-      status: 'Draft',
-      statusColor: 'bg-blue-100 text-blue-800',
-    },
-    {
-      id: 'WH/OUT/00119',
-      type: 'Delivery',
-      typeIcon: 'local_shipping',
-      typeColor: 'text-orange-600 bg-orange-50',
-      partner: 'Nordic Freight Systems',
-      partnerSub: 'SO-99220-EU',
-      date: 'Today, 15:30 PM',
-      dateSub: 'Express Export',
-      dateAlert: false,
-      units: '510 EA',
-      status: 'Waiting',
-      statusColor: 'bg-amber-100 text-amber-800',
-    },
-    {
-      id: 'WH/OUT/00120',
-      type: 'Delivery',
-      typeIcon: 'local_shipping',
-      typeColor: 'text-orange-600 bg-orange-50',
-      partner: 'Vanguard Hardware Group',
-      partnerSub: 'SO-99225-US',
-      date: 'Today, 16:00 PM',
-      dateSub: 'Fleet Truck #09',
-      dateAlert: false,
-      units: '95 EA',
-      status: 'Ready',
-      statusColor: 'bg-emerald-100 text-emerald-800',
-    },
-  ];
+  const [stats, setStats] = useState({
+    total_products: 0,
+    total_warehouses: 0,
+    total_internal_locations: 0,
+    total_stock_quantity: 0,
+    total_inventory_value: 0,
+    low_stock_count: 0,
+    pending_operations_count: 0,
+    pending_receipts_count: 0,
+    pending_deliveries_count: 0,
+    pending_transfers_count: 0,
+  });
 
-  const filteredOperations = operationsData.filter((op) => {
-    if (activeTab === 'receipts' && op.type !== 'Receipt') return false;
-    if (activeTab === 'deliveries' && op.type !== 'Delivery') return false;
-    if (activeTab === 'transfers' && op.type !== 'Transfer') return false;
+  const [operations, setOperations] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [warehouses, setWarehouses] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchDashboardData();
+  }, [selectedWarehouse, selectedCategory]);
+
+  const fetchDashboardData = async () => {
+    setLoading(true);
+    try {
+      let statsUrl = `${API_BASE}/api/dashboard/stats`;
+      const params = new URLSearchParams();
+      if (selectedWarehouse && selectedWarehouse !== 'All') {
+        params.append('warehouse_id', selectedWarehouse);
+      }
+      if (selectedCategory && selectedCategory !== 'All') {
+        params.append('category_id', selectedCategory);
+      }
+      if (params.toString()) {
+        statsUrl += `?${params.toString()}`;
+      }
+
+      const [statsRes, opsRes, catRes, whRes] = await Promise.all([
+        axios.get(statsUrl),
+        axios.get(`${API_BASE}/api/operations`),
+        axios.get(`${API_BASE}/api/categories`),
+        axios.get(`${API_BASE}/api/warehouses`),
+      ]);
+
+      if (statsRes.data) setStats(statsRes.data);
+      if (opsRes.data && Array.isArray(opsRes.data)) setOperations(opsRes.data);
+      if (catRes.data && Array.isArray(catRes.data)) setCategories(catRes.data);
+      if (whRes.data && Array.isArray(whRes.data)) setWarehouses(whRes.data);
+    } catch (err) {
+      console.error('Error fetching live dashboard data:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const filteredOperations = operations.filter((op) => {
+    const opType = (op.type || '').toLowerCase();
+    if (activeTab === 'receipts' && opType !== 'receipt') return false;
+    if (activeTab === 'deliveries' && opType !== 'delivery') return false;
+    if (activeTab === 'transfers' && opType !== 'internal') return false;
+
+    if (selectedStatus !== 'All' && (op.status || '').toLowerCase() !== selectedStatus.toLowerCase()) {
+      return false;
+    }
+
     if (searchQuery) {
       const q = searchQuery.toLowerCase();
-      return (
-        op.id.toLowerCase().includes(q) ||
-        op.partner.toLowerCase().includes(q) ||
-        op.partnerSub.toLowerCase().includes(q)
-      );
+      const refMatch = op.reference && op.reference.toLowerCase().includes(q);
+      const partnerMatch = op.supplier_or_customer && op.supplier_or_customer.toLowerCase().includes(q);
+      const productMatch = op.product_name && op.product_name.toLowerCase().includes(q);
+      const skuMatch = op.sku && op.sku.toLowerCase().includes(q);
+      return refMatch || partnerMatch || productMatch || skuMatch;
     }
+
     return true;
   });
 
@@ -167,25 +127,6 @@ export default function Dashboard() {
               <span className="material-symbols-outlined text-2xl">menu</span>
             </button>
 
-            {/* Warehouse Selector */}
-            <div className="relative hidden sm:flex items-center">
-              <span className="material-symbols-outlined absolute left-2.5 text-slate-400 pointer-events-none text-lg">
-                location_on
-              </span>
-              <select
-                value={selectedWarehouse}
-                onChange={(e) => setSelectedWarehouse(e.target.value)}
-                className="bg-slate-100 text-slate-800 text-xs font-semibold pl-8 pr-7 py-2 rounded-xl appearance-none cursor-pointer hover:bg-slate-200/70 transition-colors focus:outline-none focus:ring-2 focus:ring-orange-500/30"
-              >
-                <option value="wh-1">Main Warehouse - Floor 1</option>
-                <option value="wh-2">Secondary Depot - Rack B</option>
-                <option value="wh-3">Cold Storage Unit 3</option>
-              </select>
-              <span className="material-symbols-outlined absolute right-2 text-slate-400 pointer-events-none text-base">
-                expand_more
-              </span>
-            </div>
-
             {/* Search Input */}
             <div className="relative flex items-center flex-1">
               <span className="material-symbols-outlined absolute left-3 text-slate-400 text-lg pointer-events-none">
@@ -195,7 +136,7 @@ export default function Dashboard() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full bg-slate-100 text-slate-800 placeholder:text-slate-400 text-xs sm:text-sm pl-9 pr-14 py-2 rounded-xl hover:bg-slate-200/60 focus:bg-white focus:ring-2 focus:ring-orange-500/30 border border-transparent focus:border-orange-500/40 transition-all outline-none"
-                placeholder="Search SKU, operation, partner..."
+                placeholder="Search SKU, operation reference, vendor..."
                 type="text"
               />
               <span className="absolute right-2.5 px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-slate-200 text-slate-600 hidden sm:inline-block">
@@ -206,39 +147,23 @@ export default function Dashboard() {
 
           {/* Right Header Actions */}
           <div className="flex items-center gap-3 sm:gap-4 shrink-0">
-            {/* Live Feed Pill */}
+            {/* Live Feed Status */}
             <div className="hidden xl:flex items-center gap-2 text-xs font-semibold text-slate-600">
               <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200/60">
                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                Online
-              </span>
-              <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-100 text-slate-600">
-                <span className="material-symbols-outlined text-xs text-orange-600">sensors</span>
-                Live Stock Feed
+                PostgreSQL Live DB Connected
               </span>
             </div>
 
-            {/* Notifications Button */}
+            {/* Refresh Data */}
             <button
               type="button"
-              className="relative p-2 rounded-xl text-slate-600 hover:bg-slate-100 transition-colors"
+              onClick={fetchDashboardData}
+              className="p-2 rounded-xl text-slate-600 hover:bg-slate-100 transition-colors"
+              title="Refresh Dashboard Data"
             >
-              <span className="material-symbols-outlined text-xl">notifications</span>
-              <span className="absolute top-1.5 right-1.5 w-4 h-4 rounded-full bg-orange-600 text-white text-[10px] flex items-center justify-center font-bold">
-                3
-              </span>
+              <span className={`material-symbols-outlined text-xl ${loading ? 'animate-spin' : ''}`}>refresh</span>
             </button>
-
-            {/* New Operation Primary CTA Button */}
-            <div className="inline-flex items-center rounded-xl bg-orange-600 hover:bg-orange-700 text-white shadow-sm transition-colors">
-              <button
-                type="button"
-                className="flex items-center gap-1.5 px-3 sm:px-3.5 py-2 text-xs sm:text-sm font-semibold tracking-wide"
-              >
-                <span className="material-symbols-outlined text-base">add</span>
-                <span className="hidden sm:inline">New Operation</span>
-              </button>
-            </div>
           </div>
         </header>
 
@@ -249,90 +174,61 @@ export default function Dashboard() {
             <div className="flex flex-col gap-1">
               <div className="flex items-center gap-2.5">
                 <span className="px-2 py-0.5 rounded text-[10px] font-mono uppercase tracking-wider bg-slate-200 text-slate-800 font-bold">
-                  DC-NORTH-01
+                  DC-MAIN-01
                 </span>
                 <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-700">
                   <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
-                  Live Ingestion Engine Active
+                  StockSense Engine Active
                 </span>
               </div>
               <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
-                Warehouse Operations Overview
+                Warehouse Inventory Operations Overview
               </h1>
               <p className="text-xs sm:text-sm text-slate-500">
-                Main Distribution Center • Updated just now • <span className="text-orange-600 font-semibold">99.8% on-time fulfillment rate</span>
+                Main Distribution Center • Real-time database telemetry • <span className="text-orange-600 font-semibold">100% Stock Traceability</span>
               </p>
-            </div>
-
-            <div className="flex items-center gap-2.5 flex-wrap">
-              <div className="flex items-center bg-white border border-slate-200 shadow-xs rounded-xl px-3 py-2 gap-2 text-xs font-semibold text-slate-700">
-                <span className="material-symbols-outlined text-slate-400 text-base">calendar_today</span>
-                <span>Shift: Morning (06:00 - 14:00)</span>
-              </div>
-              <button className="flex items-center gap-1.5 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 shadow-xs px-3.5 py-2 rounded-xl text-xs font-semibold transition-colors">
-                <span className="material-symbols-outlined text-base leading-none">download</span>
-                <span>Ledger</span>
-              </button>
-              <button className="flex items-center gap-1.5 bg-orange-600 text-white hover:bg-orange-700 shadow-sm px-3.5 py-2 rounded-xl text-xs font-semibold transition-all">
-                <span className="material-symbols-outlined text-base leading-none">qr_code_scanner</span>
-                <span>Terminal Scan</span>
-                <span className="ml-1 px-1.5 py-0.2 bg-white/20 rounded text-[10px] font-mono">F2</span>
-              </button>
             </div>
           </div>
 
-          {/* 5 KPI Metric Cards */}
+          {/* 5 KPI Metric Cards (Connected to PostgreSQL Database) */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-            {/* Card 1: Total Active Products */}
+            {/* Card 1: Total In-Stock Volume */}
             <div className="bg-white border border-slate-200/80 shadow-xs rounded-2xl p-4 flex flex-col justify-between hover:shadow-md transition-shadow">
               <div className="flex items-start justify-between">
-                <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">In-Stock Volume</span>
+                <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Total Stock On-Hand</span>
                 <span className="p-1.5 rounded-xl bg-orange-50 text-orange-600">
                   <span className="material-symbols-outlined text-lg">inventory_2</span>
                 </span>
               </div>
               <div className="my-2">
-                <div className="text-2xl font-bold text-slate-900 tracking-tight">14,820</div>
-                <div className="text-[11px] text-slate-500">across 2 warehouse nodes</div>
+                <div className="text-2xl font-bold text-slate-900 tracking-tight">{stats.total_stock_quantity.toLocaleString()} units</div>
+                <div className="text-[11px] text-slate-500">{stats.total_products} unique SKUs</div>
               </div>
               <div className="pt-1 flex items-center justify-between">
                 <span className="inline-flex items-center text-xs font-semibold text-emerald-600">
-                  Live DB Count
+                  PostgreSQL Sync
                 </span>
-                <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-slate-100 text-slate-700 font-semibold">98.2% fill</span>
-              </div>
-              <div className="w-full mt-2">
-                <svg className="w-full h-6 text-orange-500" preserveAspectRatio="none" viewBox="0 0 100 24">
-                  <path d="M0 20 Q 25 15, 50 18 T 100 6" fill="none" stroke="currentColor" strokeWidth="2" vectorEffect="non-scaling-stroke"></path>
-                  <path d="M0 20 Q 25 15, 50 18 T 100 6 L 100 24 L 0 24 Z" fill="currentColor" fillOpacity="0.1"></path>
-                </svg>
+                <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-slate-100 text-slate-700 font-semibold">${stats.total_inventory_value.toLocaleString()} Val</span>
               </div>
             </div>
 
-            {/* Card 2: Stock Attention */}
+            {/* Card 2: Low Stock Attention */}
             <div className="bg-white border border-slate-200/80 shadow-xs rounded-2xl p-4 flex flex-col justify-between hover:shadow-md transition-shadow">
               <div className="flex items-start justify-between">
-                <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Stock Attention</span>
+                <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Low Stock Attention</span>
                 <span className="p-1.5 rounded-xl bg-rose-50 text-rose-600">
                   <span className="material-symbols-outlined text-lg">warning</span>
                 </span>
               </div>
               <div className="my-2">
                 <div className="flex items-baseline gap-2">
-                  <span className="text-2xl font-bold text-slate-900 tracking-tight">8</span>
-                  <span className="text-xs font-semibold text-rose-600">SKUs flagged</span>
+                  <span className="text-2xl font-bold text-slate-900 tracking-tight">{stats.low_stock_count}</span>
+                  <span className="text-xs font-semibold text-rose-600">SKUs Flagged</span>
                 </div>
-                <div className="text-[11px] text-slate-500">Threshold triggers detected</div>
+                <div className="text-[11px] text-slate-500">Below Reorder Min Level</div>
               </div>
               <div className="pt-1 flex items-center gap-1.5">
-                <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-rose-50 text-rose-700">3 Out of Stock</span>
-                <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-amber-50 text-amber-700">5 Critical</span>
-              </div>
-              <div className="w-full mt-2">
-                <svg className="w-full h-6 text-rose-500" preserveAspectRatio="none" viewBox="0 0 100 24">
-                  <path d="M0 10 Q 30 18, 60 8 T 100 20" fill="none" stroke="currentColor" strokeWidth="2" vectorEffect="non-scaling-stroke"></path>
-                  <path d="M0 10 Q 30 18, 60 8 T 100 20 L 100 24 L 0 24 Z" fill="currentColor" fillOpacity="0.1"></path>
-                </svg>
+                <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-rose-50 text-rose-700">Needs Replenishment</span>
               </div>
             </div>
 
@@ -345,18 +241,11 @@ export default function Dashboard() {
                 </span>
               </div>
               <div className="my-2">
-                <div className="text-2xl font-bold text-slate-900 tracking-tight">12 Orders</div>
-                <div className="text-[11px] text-slate-500">~1,450 incoming units</div>
+                <div className="text-2xl font-bold text-slate-900 tracking-tight">{stats.pending_receipts_count} Receipts</div>
+                <div className="text-[11px] text-slate-500">Incoming Vendor Orders</div>
               </div>
               <div className="pt-1 flex items-center justify-between">
-                <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-amber-100 text-amber-800">4 Due Today</span>
-                <span className="text-[11px] text-slate-500">Gate 1-3</span>
-              </div>
-              <div className="w-full mt-2">
-                <svg className="w-full h-6 text-amber-500" preserveAspectRatio="none" viewBox="0 0 100 24">
-                  <path d="M0 22 L 20 18 L 40 19 L 60 11 L 80 14 L 100 4" fill="none" stroke="currentColor" strokeWidth="2" vectorEffect="non-scaling-stroke"></path>
-                  <path d="M0 22 L 20 18 L 40 19 L 60 11 L 80 14 L 100 4 L 100 24 L 0 24 Z" fill="currentColor" fillOpacity="0.1"></path>
-                </svg>
+                <Link to="/receipts" className="text-xs text-amber-700 font-semibold hover:underline">Manage Receipts →</Link>
               </div>
             </div>
 
@@ -369,32 +258,25 @@ export default function Dashboard() {
                 </span>
               </div>
               <div className="my-2">
-                <div className="text-2xl font-bold text-slate-900 tracking-tight">24 Shipments</div>
-                <div className="text-[11px] text-slate-500">Outbound queue active</div>
+                <div className="text-2xl font-bold text-slate-900 tracking-tight">{stats.pending_deliveries_count} Deliveries</div>
+                <div className="text-[11px] text-slate-500">Outbound Shipping Queue</div>
               </div>
               <div className="pt-1 flex items-center justify-between">
-                <span className="text-xs text-slate-600"><strong className="text-slate-900">9</strong> picking</span>
-                <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-slate-100 text-slate-700">15 Dispatch</span>
-              </div>
-              <div className="w-full mt-2">
-                <svg className="w-full h-6 text-orange-500" preserveAspectRatio="none" viewBox="0 0 100 24">
-                  <path d="M0 16 C 30 18, 50 12, 75 9 S 90 4, 100 2" fill="none" stroke="currentColor" strokeWidth="2" vectorEffect="non-scaling-stroke"></path>
-                  <path d="M0 16 C 30 18, 50 12, 75 9 S 90 4, 100 2 L 100 24 L 0 24 Z" fill="currentColor" fillOpacity="0.1"></path>
-                </svg>
+                <Link to="/deliveries" className="text-xs text-orange-700 font-semibold hover:underline">Manage Deliveries →</Link>
               </div>
             </div>
 
-            {/* Card 5: Pending Operations */}
+            {/* Card 5: Total Pending Operations */}
             <div className="bg-white border border-slate-200/80 shadow-xs rounded-2xl p-4 flex flex-col justify-between hover:shadow-md transition-shadow">
               <div className="flex items-start justify-between">
-                <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Pending Ops</span>
+                <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Pending Operations</span>
                 <span className="p-1.5 rounded-xl bg-slate-100 text-slate-600">
                   <span className="material-symbols-outlined text-lg">pending_actions</span>
                 </span>
               </div>
               <div className="my-2">
-                <div className="text-2xl font-bold text-slate-900 tracking-tight">36</div>
-                <div className="text-[11px] text-slate-500">Draft moves queued</div>
+                <div className="text-2xl font-bold text-slate-900 tracking-tight">{stats.pending_operations_count}</div>
+                <div className="text-[11px] text-slate-500">Total Unvalidated Moves</div>
               </div>
               <div className="pt-1 flex items-center justify-between text-xs text-slate-600">
                 <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-slate-100 text-slate-600">Live Status</span>
@@ -422,7 +304,7 @@ export default function Dashboard() {
                       : 'text-slate-500 hover:text-slate-900'
                       }`}
                   >
-                    All ({operationsData.length})
+                    All ({operations.length})
                   </button>
                   <button
                     onClick={() => setActiveTab('receipts')}
@@ -453,6 +335,34 @@ export default function Dashboard() {
                   </button>
                 </div>
 
+                {/* Status Dropdown */}
+                <select
+                  value={selectedStatus}
+                  onChange={(e) => setSelectedStatus(e.target.value)}
+                  className="bg-slate-100 text-slate-800 text-xs font-semibold px-3 py-1.5 rounded-xl cursor-pointer hover:bg-slate-200/70 focus:outline-none focus:ring-2 focus:ring-orange-500/30"
+                >
+                  <option value="All">All Statuses</option>
+                  <option value="Draft">Draft</option>
+                  <option value="Waiting">Waiting</option>
+                  <option value="Ready">Ready</option>
+                  <option value="Done">Done</option>
+                  <option value="Canceled">Canceled</option>
+                </select>
+
+                {/* Category Dropdown */}
+                <select
+                  value={selectedCategory}
+                  onChange={(e) => setSelectedCategory(e.target.value)}
+                  className="bg-slate-100 text-slate-800 text-xs font-semibold px-3 py-1.5 rounded-xl cursor-pointer hover:bg-slate-200/70 focus:outline-none focus:ring-2 focus:ring-orange-500/30"
+                >
+                  <option value="All">All Categories</option>
+                  {categories.map((c) => (
+                    <option key={c.id} value={c.id}>
+                      {c.name}
+                    </option>
+                  ))}
+                </select>
+
                 {/* Filter / Search input */}
                 <div className="relative flex items-center">
                   <span className="material-symbols-outlined absolute left-2.5 text-slate-400 text-base pointer-events-none">
@@ -476,50 +386,89 @@ export default function Dashboard() {
                   <tr className="bg-slate-50/80 text-slate-500 uppercase tracking-wider text-[11px] font-bold border-b border-slate-100">
                     <th className="py-3 px-4 sm:px-6">Reference</th>
                     <th className="py-3 px-4 sm:px-6">Type</th>
-                    <th className="py-3 px-4 sm:px-6">Partner / Node</th>
-                    <th className="py-3 px-4 sm:px-6">Scheduled Date</th>
-                    <th className="py-3 px-4 sm:px-6 text-right">Units</th>
+                    <th className="py-3 px-4 sm:px-6">Contact / Product</th>
+                    <th className="py-3 px-4 sm:px-6">From → To Location</th>
+                    <th className="py-3 px-4 sm:px-6 text-right">Quantity</th>
                     <th className="py-3 px-4 sm:px-6 text-center">Status</th>
                     <th className="py-3 px-4 sm:px-6 text-right">Action</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100 text-slate-700">
-                  {filteredOperations.map((op) => (
-                    <tr key={op.id} className="hover:bg-slate-50/80 transition-colors">
-                      <td className="py-3.5 px-4 sm:px-6 font-mono font-bold text-orange-600">
-                        {op.id}
-                      </td>
-                      <td className="py-3.5 px-4 sm:px-6">
-                        <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold ${op.typeColor}`}>
-                          <span className="material-symbols-outlined text-sm">{op.typeIcon}</span>
-                          {op.type}
-                        </span>
-                      </td>
-                      <td className="py-3.5 px-4 sm:px-6">
-                        <div className="font-semibold text-slate-900">{op.partner}</div>
-                        <div className="text-[11px] text-slate-400">{op.partnerSub}</div>
-                      </td>
-                      <td className="py-3.5 px-4 sm:px-6">
-                        <div className="text-xs text-slate-800">{op.date}</div>
-                        <div className={`text-[10px] font-semibold ${op.dateAlert ? 'text-rose-600' : 'text-slate-400'}`}>
-                          {op.dateSub}
-                        </div>
-                      </td>
-                      <td className={`py-3.5 px-4 sm:px-6 text-right font-mono font-bold ${op.unitsAlert ? 'text-rose-600' : 'text-slate-900'}`}>
-                        {op.units}
-                      </td>
-                      <td className="py-3.5 px-4 sm:px-6 text-center">
-                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold ${op.statusColor}`}>
-                          {op.status}
-                        </span>
-                      </td>
-                      <td className="py-3.5 px-4 sm:px-6 text-right">
-                        <button className="px-3 py-1 rounded-lg bg-slate-100 hover:bg-orange-600 hover:text-white text-slate-700 text-xs font-semibold transition-colors">
-                          Inspect
-                        </button>
+                  {filteredOperations.length === 0 ? (
+                    <tr>
+                      <td colSpan="7" className="py-8 text-center text-slate-400 font-medium">
+                        No operations found matching current filters.
                       </td>
                     </tr>
-                  ))}
+                  ) : (
+                    filteredOperations.map((op) => {
+                      const opType = (op.type || '').toLowerCase();
+                      const isReceipt = opType === 'receipt';
+                      const isDelivery = opType === 'delivery';
+                      const isTransfer = opType === 'internal';
+
+                      let typeColor = 'text-slate-600 bg-slate-100';
+                      let typeIcon = 'tune';
+                      if (isReceipt) {
+                        typeColor = 'text-amber-600 bg-amber-50';
+                        typeIcon = 'move_to_inbox';
+                      } else if (isDelivery) {
+                        typeColor = 'text-orange-600 bg-orange-50';
+                        typeIcon = 'local_shipping';
+                      } else if (isTransfer) {
+                        typeColor = 'text-slate-600 bg-slate-100';
+                        typeIcon = 'swap_horiz';
+                      }
+
+                      let statusColor = 'bg-slate-100 text-slate-700';
+                      if ((op.status || '').toLowerCase() === 'ready') statusColor = 'bg-emerald-100 text-emerald-800';
+                      else if ((op.status || '').toLowerCase() === 'waiting') statusColor = 'bg-amber-100 text-amber-800';
+                      else if ((op.status || '').toLowerCase() === 'draft') statusColor = 'bg-blue-100 text-blue-800';
+                      else if ((op.status || '').toLowerCase() === 'done') statusColor = 'bg-slate-100 text-slate-800 font-bold';
+
+                      return (
+                        <tr key={op.id} className="hover:bg-slate-50/80 transition-colors">
+                          <td className="py-3.5 px-4 sm:px-6 font-mono font-bold text-orange-600">
+                            {op.reference || `WH/OP/${op.id}`}
+                          </td>
+                          <td className="py-3.5 px-4 sm:px-6">
+                            <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold ${typeColor}`}>
+                              <span className="material-symbols-outlined text-sm">{typeIcon}</span>
+                              {isReceipt ? 'Receipt' : isDelivery ? 'Delivery' : isTransfer ? 'Internal Transfer' : 'Adjustment'}
+                            </span>
+                          </td>
+                          <td className="py-3.5 px-4 sm:px-6">
+                            <div className="font-semibold text-slate-900">{op.supplier_or_customer || op.product_name || 'General Operation'}</div>
+                            <div className="text-[11px] text-slate-400">{op.sku ? `SKU: ${op.sku}` : op.po_or_bol_ref}</div>
+                          </td>
+                          <td className="py-3.5 px-4 sm:px-6">
+                            <div className="text-xs text-slate-800 font-medium">
+                              {op.from_location || 'Vendor Location'} → {op.to_location || 'Customer Location'}
+                            </div>
+                            <div className="text-[10px] text-slate-400">
+                              {op.created_at ? new Date(op.created_at).toLocaleDateString() : 'Today'}
+                            </div>
+                          </td>
+                          <td className="py-3.5 px-4 sm:px-6 text-right font-mono font-bold text-slate-900">
+                            {op.quantity} {op.unit_of_measure || 'pcs'}
+                          </td>
+                          <td className="py-3.5 px-4 sm:px-6 text-center">
+                            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold ${statusColor}`}>
+                              {op.status ? op.status.charAt(0).toUpperCase() + op.status.slice(1) : 'Draft'}
+                            </span>
+                          </td>
+                          <td className="py-3.5 px-4 sm:px-6 text-right">
+                            <Link
+                              to={isReceipt ? '/receipts' : isDelivery ? '/deliveries' : isTransfer ? '/internal-transfers' : '/ledger'}
+                              className="px-3 py-1 rounded-lg bg-slate-100 hover:bg-orange-600 hover:text-white text-slate-700 text-xs font-semibold transition-colors inline-block"
+                            >
+                              Inspect
+                            </Link>
+                          </td>
+                        </tr>
+                      );
+                    })
+                  )}
                 </tbody>
               </table>
             </div>
@@ -527,24 +476,12 @@ export default function Dashboard() {
             {/* Pagination Footer */}
             <div className="p-4 bg-slate-50/70 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500">
               <div>
-                Showing <span className="font-semibold text-slate-800">{filteredOperations.length}</span> operations
-              </div>
-              <div className="flex items-center gap-1">
-                <button className="p-1 rounded-lg bg-white border border-slate-200 text-slate-400 hover:text-slate-700 hover:bg-slate-50 disabled:opacity-40" disabled>
-                  <span className="material-symbols-outlined text-base">chevron_left</span>
-                </button>
-                <button className="px-3 py-1 rounded-lg bg-orange-600 text-white font-bold">1</button>
-                <button className="px-3 py-1 rounded-lg bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-medium">2</button>
-                <button className="px-3 py-1 rounded-lg bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-medium">3</button>
-                <span className="px-1 text-slate-400">...</span>
-                <button className="p-1 rounded-lg bg-white border border-slate-200 text-slate-600 hover:bg-slate-50">
-                  <span className="material-symbols-outlined text-base">chevron_right</span>
-                </button>
+                Showing <span className="font-semibold text-slate-800">{filteredOperations.length}</span> operations from live database
               </div>
             </div>
           </div>
 
-          {/* 3 Real-time Telemetry Status Cards */}
+          {/* 3 Real-time Inventory Status Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pb-6">
             <div className="bg-white border border-slate-200/80 shadow-xs rounded-2xl p-4 flex items-center justify-between">
               <div className="flex items-center gap-3">
@@ -552,12 +489,12 @@ export default function Dashboard() {
                   <span className="material-symbols-outlined text-xl">sensors</span>
                 </div>
                 <div>
-                  <div className="text-xs font-bold text-slate-900">Active RFID Portals</div>
-                  <div className="text-[11px] text-slate-500">14/14 Readers Synchronized</div>
+                  <div className="text-xs font-bold text-slate-900">Warehouse Nodes & Locations</div>
+                  <div className="text-[11px] text-slate-500">{stats.total_warehouses} Warehouses • {stats.total_internal_locations} Internal Locations</div>
                 </div>
               </div>
               <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-emerald-50 text-emerald-700 font-bold border border-emerald-200/60">
-                99.9% PING
+                ACTIVE
               </span>
             </div>
 
@@ -567,12 +504,12 @@ export default function Dashboard() {
                   <span className="material-symbols-outlined text-xl">forklift</span>
                 </div>
                 <div>
-                  <div className="text-xs font-bold text-slate-900">MHE Automation Telemetry</div>
-                  <div className="text-[11px] text-slate-500">6 AGVs in Continuous Loop</div>
+                  <div className="text-xs font-bold text-slate-900">Pending Movements Queue</div>
+                  <div className="text-[11px] text-slate-500">{stats.pending_operations_count} Operations in Draft/Ready State</div>
                 </div>
               </div>
               <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-amber-50 text-amber-800 font-bold border border-amber-200/60">
-                Zero Stops
+                QUEUED
               </span>
             </div>
 
@@ -582,12 +519,12 @@ export default function Dashboard() {
                   <span className="material-symbols-outlined text-xl">verified</span>
                 </div>
                 <div>
-                  <div className="text-xs font-bold text-slate-900">Cycle Count Compliance</div>
-                  <div className="text-[11px] text-slate-500">Daily Schedule 100% on Track</div>
+                  <div className="text-xs font-bold text-slate-900">Cycle Count & Reordering</div>
+                  <div className="text-[11px] text-slate-500">Threshold Compliance Monitored</div>
                 </div>
               </div>
               <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-slate-100 text-slate-700 font-bold">
-                Audited 12:00
+                AUDITED
               </span>
             </div>
           </div>

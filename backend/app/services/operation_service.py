@@ -42,16 +42,23 @@ def get_or_create_default_location(db: Session) -> Location:
     return loc
 
 
-def generate_reference(op_type: str) -> str:
-    num = random.randint(1000, 9999)
-    if op_type.lower() == 'receipt':
-        return f"WH/IN/{num}"
-    elif op_type.lower() == 'delivery':
-        return f"WH/OUT/{num}"
-    elif op_type.lower() == 'internal':
-        return f"WH/INT/{num}"
-    else:
-        return f"WH/ADJ/{num}"
+def generate_reference(db: Session, op_type: str) -> str:
+    prefix_map = {
+        'receipt': 'WH/IN',
+        'delivery': 'WH/OUT',
+        'internal': 'WH/INT',
+        'adjustment': 'WH/ADJ',
+    }
+    prefix = prefix_map.get(op_type.lower(), 'WH/OP')
+    count = db.query(Operation).filter(Operation.type.ilike(op_type.strip())).count()
+
+    seq = count + 1
+    while True:
+        candidate = f"{prefix}/{seq:05d}"
+        exists = db.query(Operation).filter(Operation.reference == candidate).first()
+        if not exists:
+            return candidate
+        seq += 1
 
 
 def get_operations(
@@ -136,7 +143,7 @@ def get_operation_by_id(db: Session, op_id: int) -> OperationResponse:
 
 def create_operation(db: Session, op_in: OperationCreate) -> OperationResponse:
     op_type = op_in.type.lower()
-    ref = generate_reference(op_type)
+    ref = generate_reference(db, op_type)
 
     product_name = op_in.product_name or "General Item"
     product_sku = op_in.sku or f"SKU-{random.randint(1000, 9999)}"

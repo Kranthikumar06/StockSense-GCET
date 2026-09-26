@@ -9,6 +9,7 @@ class UserCreate(BaseModel):
     email: str
     password: str
     re_password: str
+    role: str = "staff"
 
     @field_validator("name")
     @classmethod

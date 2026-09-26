@@ -22,6 +22,90 @@ export default function EnterpriseLogin() {
   const [submitting, setSubmitting] = useState(false);
   const [loginError, setLoginError] = useState('');
 
+  // Forgot Password Modal State
+  const [forgotModalOpen, setForgotModalOpen] = useState(false);
+  const [forgotStep, setForgotStep] = useState(1);
+  const [resetEmail, setResetEmail] = useState('');
+  const [otpCode, setOtpCode] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [rePassword, setRePassword] = useState('');
+  const [resetStatusMsg, setResetStatusMsg] = useState(null);
+  const [resetErrorMsg, setResetErrorMsg] = useState(null);
+  const [resetLoading, setResetLoading] = useState(false);
+
+  const handleSendOTP = async (e) => {
+    e.preventDefault();
+    setResetErrorMsg(null);
+    setResetStatusMsg(null);
+    if (!resetEmail) {
+      setResetErrorMsg('Please enter your account email address.');
+      return;
+    }
+    setResetLoading(true);
+    try {
+      const res = await axios.post(`${API_URL}/forgot-password`, { email: resetEmail.trim() });
+      setResetStatusMsg(res.data.message);
+      setOtpCode('');
+      setForgotStep(2);
+    } catch (err) {
+      setResetErrorMsg(err.response?.data?.detail || 'Failed to request OTP code.');
+    } finally {
+      setResetLoading(false);
+    }
+  };
+
+  const handleVerifyOTP = async (e) => {
+    e.preventDefault();
+    setResetErrorMsg(null);
+    setResetStatusMsg(null);
+    if (!otpCode) {
+      setResetErrorMsg('Please enter the 6-digit OTP code.');
+      return;
+    }
+    setResetLoading(true);
+    try {
+      const res = await axios.post(`${API_URL}/verify-otp`, { email: resetEmail.trim(), otp_code: otpCode.trim() });
+      setResetStatusMsg(res.data.message);
+      setForgotStep(3);
+    } catch (err) {
+      setResetErrorMsg(err.response?.data?.detail || 'Invalid or expired OTP code.');
+    } finally {
+      setResetLoading(false);
+    }
+  };
+
+  const handleResetPassword = async (e) => {
+    e.preventDefault();
+    setResetErrorMsg(null);
+    setResetStatusMsg(null);
+    if (!newPassword || newPassword !== rePassword) {
+      setResetErrorMsg('Passwords do not match or are blank.');
+      return;
+    }
+    setResetLoading(true);
+    try {
+      const res = await axios.post(`${API_URL}/reset-password`, {
+        email: resetEmail.trim(),
+        otp_code: otpCode,
+        new_password: newPassword,
+        re_password: rePassword,
+      });
+      setResetStatusMsg(res.data.message);
+      setTimeout(() => {
+        setForgotModalOpen(false);
+        setForgotStep(1);
+        setResetEmail('');
+        setOtpCode('');
+        setNewPassword('');
+        setRePassword('');
+      }, 2500);
+    } catch (err) {
+      setResetErrorMsg(err.response?.data?.detail || 'Password reset failed.');
+    } finally {
+      setResetLoading(false);
+    }
+  };
+
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData((prev) => ({
@@ -149,6 +233,18 @@ export default function EnterpriseLogin() {
                     <label className="block text-[11px] font-bold uppercase tracking-wider text-brand-dark" htmlFor="password">
                       Password
                     </label>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setForgotModalOpen(true);
+                        setForgotStep(1);
+                        setResetErrorMsg(null);
+                        setResetStatusMsg(null);
+                      }}
+                      className="text-xs font-semibold text-brand-orange hover:underline focus:outline-none"
+                    >
+                      Forgot Password?
+                    </button>
                   </div>
                   <div className="relative rounded-xl">
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-stone-400">
@@ -278,6 +374,142 @@ export default function EnterpriseLogin() {
           </div>
         </div>
       </main>
+
+      {/* Forgot Password Modal Overlay */}
+      {forgotModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs animate-fadeIn">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 border border-slate-200 relative">
+            <button
+              type="button"
+              onClick={() => setForgotModalOpen(false)}
+              className="absolute top-4 right-4 text-slate-400 hover:text-slate-700 p-1 rounded-lg"
+            >
+              <span className="material-symbols-outlined text-xl">close</span>
+            </button>
+
+            <div className="mb-4">
+              <h3 className="text-lg font-bold text-slate-900">Reset Password (OTP Verification)</h3>
+              <p className="text-xs text-slate-500 mt-1">
+                {forgotStep === 1 && 'Enter your registered account email to receive a 6-digit OTP code.'}
+                {forgotStep === 2 && 'Enter the 6-digit OTP code sent to your email.'}
+                {forgotStep === 3 && 'Set a new secure password for your StockSense account.'}
+              </p>
+            </div>
+
+            {resetErrorMsg && (
+              <div className="mb-4 p-3 bg-rose-50 border border-rose-200 text-rose-700 rounded-xl text-xs font-semibold">
+                ⚠️ {resetErrorMsg}
+              </div>
+            )}
+
+            {resetStatusMsg && (
+              <div className="mb-4 p-3 bg-emerald-50 border border-emerald-200 text-emerald-700 rounded-xl text-xs font-semibold">
+                ✅ {resetStatusMsg}
+              </div>
+            )}
+
+            {/* Step 1: Enter Email */}
+            {forgotStep === 1 && (
+              <form onSubmit={handleSendOTP} className="space-y-4">
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                    Account Email Address
+                  </label>
+                  <input
+                    type="email"
+                    value={resetEmail}
+                    onChange={(e) => setResetEmail(e.target.value)}
+                    placeholder="name@company.com"
+                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    required
+                  />
+                </div>
+                <button
+                  type="submit"
+                  disabled={resetLoading}
+                  className="w-full py-2.5 bg-orange-600 hover:bg-orange-700 text-white font-semibold text-xs sm:text-sm rounded-xl shadow-sm transition-colors"
+                >
+                  {resetLoading ? 'Generating OTP...' : 'Send OTP Code'}
+                </button>
+              </form>
+            )}
+
+            {/* Step 2: Verify OTP */}
+            {forgotStep === 2 && (
+              <form onSubmit={handleVerifyOTP} className="space-y-4">
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                    Enter 6-Digit OTP Code
+                  </label>
+                  <input
+                    type="text"
+                    value={otpCode}
+                    onChange={(e) => setOtpCode(e.target.value)}
+                    placeholder="e.g. 849201"
+                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm font-mono tracking-widest text-center focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    required
+                  />
+                </div>
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setForgotStep(1)}
+                    className="w-1/3 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs rounded-xl"
+                  >
+                    Back
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={resetLoading}
+                    className="w-2/3 py-2.5 bg-orange-600 hover:bg-orange-700 text-white font-semibold text-xs sm:text-sm rounded-xl shadow-sm transition-colors"
+                  >
+                    {resetLoading ? 'Verifying...' : 'Verify OTP'}
+                  </button>
+                </div>
+              </form>
+            )}
+
+            {/* Step 3: New Password */}
+            {forgotStep === 3 && (
+              <form onSubmit={handleResetPassword} className="space-y-3">
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                    New Password
+                  </label>
+                  <input
+                    type="password"
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    placeholder="••••••••••••"
+                    className="w-full px-3.5 py-2 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                    Confirm New Password
+                  </label>
+                  <input
+                    type="password"
+                    value={rePassword}
+                    onChange={(e) => setRePassword(e.target.value)}
+                    placeholder="••••••••••••"
+                    className="w-full px-3.5 py-2 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    required
+                  />
+                </div>
+                <button
+                  type="submit"
+                  disabled={resetLoading}
+                  className="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs sm:text-sm rounded-xl shadow-sm transition-colors mt-2"
+                >
+                  {resetLoading ? 'Updating...' : 'Update Password & Login'}
+                </button>
+              </form>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
