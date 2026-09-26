@@ -1,0 +1,217 @@
+/* ============================================================
+   ProductCatalog.css
+   Page-specific styles for the Product Catalog & Stock Management page
+   ============================================================ */
+
+/* ── KPI Metric Cards ── */
+
+.catalog-kpi-card {
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.catalog-kpi-card:hover {
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.09);
+  transform: translateY(-2px);
+}
+
+/* Bottom accent bar animation on card entry */
+.catalog-kpi-accent-bar {
+  height: 4px;
+  border-radius: 0 0 1rem 1rem;
+  transform-origin: left;
+  animation: growBar 0.8s ease forwards;
+}
+
+@keyframes growBar {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+/* ── Filter Toolbar ── */
+
+.catalog-filter-bar {
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+}
+
+/* Category pill active state */
+.catalog-pill-active {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+/* ── Products Table ── */
+
+/* Row hover & color highlight bands */
+.catalog-row {
+  transition: background-color 0.12s ease;
+}
+
+.catalog-row-low-stock {
+  background-color: rgba(254, 243, 199, 0.25);
+}
+
+.catalog-row-low-stock:hover {
+  background-color: rgba(254, 243, 199, 0.45);
+}
+
+.catalog-row-out-of-stock {
+  background-color: rgba(254, 226, 226, 0.25);
+}
+
+.catalog-row-out-of-stock:hover {
+  background-color: rgba(254, 226, 226, 0.45);
+}
+
+/* Product name hover color */
+.catalog-product-name {
+  transition: color 0.15s ease;
+}
+
+.catalog-row:hover .catalog-product-name {
+  color: #ea580c;
+}
+
+/* Mini stock progress bar */
+.catalog-stock-bar {
+  height: 6px;
+  border-radius: 9999px;
+  overflow: hidden;
+  background: #f1f5f9;
+}
+
+.catalog-stock-bar-fill {
+  height: 100%;
+  border-radius: 9999px;
+  transition: width 0.6s ease;
+}
+
+/* Action buttons */
+.catalog-action-btn {
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+/* ── Add Product Drawer ── */
+
+/* Slide-over panel transition */
+.catalog-drawer {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.catalog-drawer-open {
+  transform: translateX(0);
+}
+
+.catalog-drawer-closed {
+  transform: translateX(100%);
+}
+
+/* Drawer backdrop */
+.catalog-drawer-backdrop {
+  animation: backdropFadeIn 0.25s ease;
+}
+
+@keyframes backdropFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Drawer form input focus */
+.catalog-drawer-input:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.15);
+  border-color: rgba(234, 88, 12, 0.5);
+}
+
+/* Save Product button glow */
+.catalog-save-btn {
+  box-shadow: 0 8px 20px -4px rgba(234, 88, 12, 0.35);
+  transition: box-shadow 0.2s ease, transform 0.15s ease;
+}
+
+.catalog-save-btn:hover {
+  box-shadow: 0 12px 28px -4px rgba(234, 88, 12, 0.45);
+  transform: translateY(-1px);
+}
+
+.catalog-save-btn:active {
+  transform: scale(0.99);
+  box-shadow: none;
+}
+
+/* ── Sidebar (shared with dashboard but scoped) ── */
+
+.catalog-sidebar {
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.catalog-sidebar-nav::-webkit-scrollbar {
+  display: none;
+}
+
+/* Active nav item ring */
+.catalog-nav-active {
+  position: relative;
+}
+
+.catalog-nav-active::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 0.75rem;
+  box-shadow: 0 0 0 2px rgba(234, 88, 12, 0.25);
+  pointer-events: none;
+}
+
+/* ── Live badge pulse ── */
+
+.catalog-live-dot {
+  animation: catalogLivePulse 2s ease-in-out infinite;
+}
+
+@keyframes catalogLivePulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.85); }
+}
+
+/* ── Notification badge bounce ── */
+
+.catalog-notif-badge {
+  animation: notifBounce 3s ease infinite;
+}
+
+@keyframes notifBounce {
+  0%, 90%, 100% { transform: scale(1); }
+  93% { transform: scale(1.15); }
+  96% { transform: scale(0.92); }
+}
+
+/* ── Bulk action bar ── */
+
+.catalog-bulk-bar {
+  animation: slideUpBulk 0.2s ease;
+}
+
+@keyframes slideUpBulk {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Custom scrollbar ── */
+
+.catalog-page ::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+.catalog-page ::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+.catalog-page ::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+}
+
+.catalog-page ::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}

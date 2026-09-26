@@ -11,6 +11,9 @@ class DashboardSummary(BaseModel):
     total_inventory_value: float
     low_stock_count: int
     pending_operations_count: int
+    pending_receipts_count: int = 0
+    pending_deliveries_count: int = 0
+    pending_transfers_count: int = 0
 
 
 class LowStockItem(BaseModel):

@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import StockSenseLogo from '../components/StockSenseLogo';
+import Sidebar, { useSidebarState } from '../components/Sidebar';
 
 const API_URL = 'http://localhost:8000/api/dashboard';
 
 export default function Dashboard() {
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(true);
+  const [sidebarCollapsed, setSidebarCollapsed] = useSidebarState();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
@@ -152,198 +152,13 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-800 antialiased font-sans flex flex-col">
-      {/* Mobile Drawer Backdrop */}
-      {mobileMenuOpen && (
-        <div
-          className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs z-50 lg:hidden transition-opacity"
-          onClick={() => setMobileMenuOpen(false)}
-        />
-      )}
-
-      {/* Collapsible White-Theme Sidebar */}
-      <aside
-        className={`fixed left-0 top-0 h-full bg-white border-r border-slate-200/80 shadow-[0_2px_14px_rgba(0,0,0,0.04)] z-50 flex flex-col justify-between select-none transition-all duration-300 ease-in-out ${
-          sidebarCollapsed ? 'w-[76px]' : 'w-64'
-        } ${
-          mobileMenuOpen
-            ? 'translate-x-0 w-64'
-            : '-translate-x-full lg:translate-x-0'
-        }`}
-      >
-        <div className="flex flex-col flex-1 min-h-0">
-          {/* Header Bar with Logo & Equal-To / Menu Toggle Icon */}
-          <div className="h-16 px-3.5 flex items-center justify-between border-b border-slate-100">
-            {!sidebarCollapsed ? (
-              <>
-                <Link to="/" className="flex items-center gap-2 overflow-hidden">
-                  <StockSenseLogo className="h-8" />
-                </Link>
-
-                <button
-                  type="button"
-                  onClick={() => setSidebarCollapsed(true)}
-                  className="p-2 rounded-xl text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition-colors focus:outline-none flex items-center justify-center"
-                  title="Collapse Sidebar"
-                >
-                  <span className="material-symbols-outlined text-2xl leading-none">
-                    menu
-                  </span>
-                </button>
-              </>
-            ) : (
-              <div className="w-full flex justify-center">
-                <button
-                  type="button"
-                  onClick={() => setSidebarCollapsed(false)}
-                  className="w-11 h-11 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-all flex items-center justify-center focus:outline-none"
-                  title="Expand Sidebar"
-                >
-                  <span className="material-symbols-outlined text-2xl leading-none">
-                    menu
-                  </span>
-                </button>
-              </div>
-            )}
-
-            {/* Mobile Close Button */}
-            <button
-              type="button"
-              onClick={() => setMobileMenuOpen(false)}
-              className="lg:hidden p-1.5 rounded-lg text-slate-500 hover:bg-slate-100 ml-auto"
-            >
-              <span className="material-symbols-outlined text-xl">close</span>
-            </button>
-          </div>
-
-          {/* Search Box inside Sidebar */}
-          <div className="px-3 pt-3 pb-1">
-            {!sidebarCollapsed ? (
-              <div className="relative flex items-center">
-                <span className="material-symbols-outlined absolute left-3 text-slate-400 text-lg pointer-events-none">
-                  search
-                </span>
-                <input
-                  type="text"
-                  value={sidebarSearch}
-                  onChange={(e) => setSidebarSearch(e.target.value)}
-                  placeholder="Search..."
-                  className="w-full bg-slate-100 text-slate-800 placeholder:text-slate-400 text-xs pl-9 pr-3 py-2.5 rounded-xl outline-none focus:bg-white focus:ring-2 focus:ring-orange-500/30 border border-transparent focus:border-orange-500/40 transition-all"
-                />
-              </div>
-            ) : (
-              <div className="flex justify-center">
-                <button
-                  type="button"
-                  onClick={() => setSidebarCollapsed(false)}
-                  className="w-11 h-11 rounded-xl text-slate-500 hover:text-slate-900 hover:bg-slate-100 flex items-center justify-center transition-colors"
-                  title="Search"
-                >
-                  <span className="material-symbols-outlined text-xl leading-none">search</span>
-                </button>
-              </div>
-            )}
-          </div>
-
-          {/* Navigation Links */}
-          <nav className="flex-1 overflow-y-auto px-3 py-2 space-y-1.5">
-            <Link
-              to="/dashboard"
-              className={`flex items-center rounded-xl bg-orange-600 text-white font-semibold shadow-sm transition-all ${
-                sidebarCollapsed
-                  ? 'w-11 h-11 mx-auto justify-center'
-                  : 'px-3.5 py-2.5 gap-3'
-              }`}
-              title="Dashboard"
-            >
-              <span className="material-symbols-outlined text-xl leading-none">dashboard</span>
-              {!sidebarCollapsed && <span className="text-sm">Dashboard</span>}
-            </Link>
-
-            <a
-              href="#products"
-              className={`flex items-center rounded-xl text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors ${
-                sidebarCollapsed
-                  ? 'w-11 h-11 mx-auto justify-center'
-                  : 'px-3.5 py-2.5 gap-3'
-              }`}
-              title="Products Catalog"
-            >
-              <span className="material-symbols-outlined text-xl leading-none">inventory_2</span>
-              {!sidebarCollapsed && <span className="text-sm font-medium">Products ({stats.total_products})</span>}
-            </a>
-
-            <a
-              href="#receipts"
-              className={`flex items-center rounded-xl text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors ${
-                sidebarCollapsed
-                  ? 'w-11 h-11 mx-auto justify-center'
-                  : 'px-3.5 py-2.5 gap-3'
-              }`}
-              title="Receipts"
-            >
-              <span className="material-symbols-outlined text-xl leading-none text-amber-600">move_to_inbox</span>
-              {!sidebarCollapsed && (
-                <div className="flex items-center justify-between flex-1 min-w-0">
-                  <span className="text-sm font-medium truncate">Receipts</span>
-                  <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-800">12</span>
-                </div>
-              )}
-            </a>
-
-            <a
-              href="#deliveries"
-              className={`flex items-center rounded-xl text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors ${
-                sidebarCollapsed
-                  ? 'w-11 h-11 mx-auto justify-center'
-                  : 'px-3.5 py-2.5 gap-3'
-              }`}
-              title="Delivery Orders"
-            >
-              <span className="material-symbols-outlined text-xl leading-none text-orange-600">local_shipping</span>
-              {!sidebarCollapsed && (
-                <div className="flex items-center justify-between flex-1 min-w-0">
-                  <span className="text-sm font-medium truncate">Deliveries</span>
-                  <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-orange-100 text-orange-800">24</span>
-                </div>
-              )}
-            </a>
-          </nav>
-        </div>
-
-        {/* User Profile Card */}
-        <div className="p-3 border-t border-slate-100 bg-slate-50/70">
-          {!sidebarCollapsed ? (
-            <div className="flex items-center justify-between p-2 rounded-xl bg-white border border-slate-200/70 shadow-xs">
-              <div className="flex items-center gap-2.5 min-w-0">
-                <div className="w-8 h-8 rounded-full bg-orange-500 text-white font-bold text-xs flex items-center justify-center shrink-0">
-                  SC
-                </div>
-                <div className="flex flex-col min-w-0">
-                  <span className="text-xs font-bold text-slate-800 truncate leading-tight">StockSense User</span>
-                  <span className="text-[10px] text-slate-500 truncate leading-tight">Inventory Manager</span>
-                </div>
-              </div>
-              <Link
-                to="/login"
-                className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors shrink-0"
-                title="Log Out"
-              >
-                <span className="material-symbols-outlined text-lg leading-none">logout</span>
-              </Link>
-            </div>
-          ) : (
-            <div className="flex justify-center">
-              <Link
-                to="/login"
-                className="w-11 h-11 rounded-xl bg-white border border-slate-200/80 text-slate-500 hover:text-rose-600 hover:bg-rose-50 flex items-center justify-center transition-all shadow-xs"
-                title="Log Out"
-              >
-                <span className="material-symbols-outlined text-xl leading-none">logout</span>
-              </Link>
-            </div>
-          )}
-        </div>
-      </aside>
+      <Sidebar
+        activeRoute="/dashboard"
+        collapsed={sidebarCollapsed}
+        onToggle={setSidebarCollapsed}
+        mobileOpen={mobileMenuOpen}
+        onMobileClose={() => setMobileMenuOpen(false)}
+      />
 
       {/* Main Content Body Wrapper */}
       <div
@@ -431,7 +246,7 @@ export default function Dashboard() {
           {/* 5 KPI Metric Cards (Integrated with Backend API Data) */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
             {/* Card 1: Total Active Products */}
-            <div className="bg-white border border-slate-200/80 shadow-xs rounded-2xl p-4 flex flex-col justify-between hover:shadow-md transition-shadow">
+            <Link to="/products" className="bg-white border border-slate-200/80 shadow-xs rounded-2xl p-4 flex flex-col justify-between hover:shadow-md transition-shadow cursor-pointer">
               <div className="flex items-start justify-between">
                 <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Active Products</span>
                 <span className="p-1.5 rounded-xl bg-orange-50 text-orange-600">
@@ -446,10 +261,10 @@ export default function Dashboard() {
               </div>
               <div className="pt-1 flex items-center justify-between">
                 <span className="inline-flex items-center text-xs font-semibold text-emerald-600">
-                  Live DB Count
+                  Live DB Count →
                 </span>
               </div>
-            </div>
+            </Link>
 
             {/* Card 2: In-Stock Quantity */}
             <div className="bg-white border border-slate-200/80 shadow-xs rounded-2xl p-4 flex flex-col justify-between hover:shadow-md transition-shadow">
@@ -513,20 +328,54 @@ export default function Dashboard() {
               </div>
             </div>
 
-            {/* Card 5: Pending Operations */}
+            {/* Card 5: Pending Receipts */}
             <div className="bg-white border border-slate-200/80 shadow-xs rounded-2xl p-4 flex flex-col justify-between hover:shadow-md transition-shadow">
               <div className="flex items-start justify-between">
-                <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Pending Ops</span>
-                <span className="p-1.5 rounded-xl bg-slate-100 text-slate-600">
-                  <span className="material-symbols-outlined text-lg">pending_actions</span>
+                <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Pending Receipts</span>
+                <span className="p-1.5 rounded-xl bg-blue-50 text-blue-600">
+                  <span className="material-symbols-outlined text-lg">call_received</span>
                 </span>
               </div>
               <div className="my-2">
-                <div className="text-2xl font-bold text-slate-900 tracking-tight">{stats.pending_operations_count}</div>
-                <div className="text-[11px] text-slate-500">Draft moves queued</div>
+                <div className="text-2xl font-bold text-slate-900 tracking-tight">{stats.pending_receipts_count || 0}</div>
+                <div className="text-[11px] text-slate-500">Inbound receipts queued</div>
               </div>
               <div className="pt-1 flex items-center justify-between text-xs text-slate-600">
-                <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-slate-100 text-slate-600">Live Status</span>
+                <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-blue-50 text-blue-700 font-semibold">Incoming</span>
+              </div>
+            </div>
+
+            {/* Card 6: Pending Deliveries */}
+            <div className="bg-white border border-slate-200/80 shadow-xs rounded-2xl p-4 flex flex-col justify-between hover:shadow-md transition-shadow">
+              <div className="flex items-start justify-between">
+                <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Pending Deliveries</span>
+                <span className="p-1.5 rounded-xl bg-indigo-50 text-indigo-600">
+                  <span className="material-symbols-outlined text-lg">local_shipping</span>
+                </span>
+              </div>
+              <div className="my-2">
+                <div className="text-2xl font-bold text-slate-900 tracking-tight">{stats.pending_deliveries_count || 0}</div>
+                <div className="text-[11px] text-slate-500">Outbound orders queued</div>
+              </div>
+              <div className="pt-1 flex items-center justify-between text-xs text-slate-600">
+                <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-indigo-50 text-indigo-700 font-semibold">Outgoing</span>
+              </div>
+            </div>
+
+            {/* Card 7: Internal Transfers */}
+            <div className="bg-white border border-slate-200/80 shadow-xs rounded-2xl p-4 flex flex-col justify-between hover:shadow-md transition-shadow">
+              <div className="flex items-start justify-between">
+                <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Internal Transfers</span>
+                <span className="p-1.5 rounded-xl bg-purple-50 text-purple-600">
+                  <span className="material-symbols-outlined text-lg">sync_alt</span>
+                </span>
+              </div>
+              <div className="my-2">
+                <div className="text-2xl font-bold text-slate-900 tracking-tight">{stats.pending_transfers_count || 0}</div>
+                <div className="text-[11px] text-slate-500">Location shifts queued</div>
+              </div>
+              <div className="pt-1 flex items-center justify-between text-xs text-slate-600">
+                <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-purple-50 text-purple-700 font-semibold">Node Shifts</span>
               </div>
             </div>
           </div>

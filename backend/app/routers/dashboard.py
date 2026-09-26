@@ -1,5 +1,5 @@
-from typing import List
-from fastapi import APIRouter, Depends
+from typing import List, Optional
+from fastapi import APIRouter, Depends, Query
 from sqlalchemy.orm import Session
 
 from app.database import get_db
@@ -20,9 +20,13 @@ router = APIRouter(prefix="/api/dashboard", tags=["Dashboard"])
 
 
 @router.get("/stats", response_model=DashboardSummary)
-def read_dashboard_stats(db: Session = Depends(get_db)):
+def read_dashboard_stats(
+    warehouse_id: Optional[int] = Query(None, description="Filter by warehouse ID"),
+    category_id: Optional[int] = Query(None, description="Filter by category ID"),
+    db: Session = Depends(get_db)
+):
     """Fetch aggregated top-level Dashboard KPIs (Total Products, Stock Qty, Valuation, Low Stock Count, Pending Ops)."""
-    return get_dashboard_summary(db)
+    return get_dashboard_summary(db, warehouse_id=warehouse_id, category_id=category_id)
 
 
 @router.get("/low-stock", response_model=List[LowStockItem])

@@ -1,0 +1,38 @@
+/* ============================================================
+   InternalTransfers.css
+   Page-specific styles for Internal Transfers
+   ============================================================ */
+
+.transfers-container ::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.transfers-container ::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+.transfers-container ::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+}
+.transfers-container ::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+.transfer-card {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+}
+.transfer-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.06), 0 4px 6px -2px rgba(15, 23, 42, 0.02);
+  border-color: #cbd5e1;
+}
+
+.drawer-backdrop-transfer {
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.drawer-panel-transfer {
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}

@@ -1,3 +1,4 @@
+from typing import List, Optional
 from sqlalchemy.orm import Session
 from sqlalchemy import func, or_
 
@@ -14,13 +15,28 @@ from app.schemas.dashboard import (
 )
 
 
-def get_dashboard_summary(db: Session) -> DashboardSummary:
-    total_products = db.query(Product).filter(Product.is_active == True).count()
+from app.models.operation import Operation
+
+
+def get_dashboard_summary(
+    db: Session,
+    warehouse_id: Optional[int] = None,
+    category_id: Optional[int] = None,
+) -> DashboardSummary:
+    prod_query = db.query(Product).filter(Product.is_active == True)
+    if category_id:
+        prod_query = prod_query.filter(Product.category_id == category_id)
+    total_products = prod_query.count()
+
     total_warehouses = db.query(Warehouse).count()
-    total_internal_locations = db.query(Location).filter(Location.type == "internal").count()
+
+    loc_query = db.query(Location).filter(Location.type == "internal")
+    if warehouse_id:
+        loc_query = loc_query.filter(Location.warehouse_id == warehouse_id)
+    total_internal_locations = loc_query.count()
 
     # Sum of stock quantity across internal locations
-    stock_internal_query = (
+    stock_query = (
         db.query(
             func.coalesce(func.sum(StockQuant.quantity), 0.0).label("total_qty"),
             func.coalesce(func.sum(StockQuant.quantity * Product.per_unit_cost), 0.0).label("total_val"),
@@ -28,23 +44,47 @@ def get_dashboard_summary(db: Session) -> DashboardSummary:
         .join(Product, StockQuant.product_id == Product.id)
         .join(Location, StockQuant.location_id == Location.id)
         .filter(Location.type == "internal")
-        .first()
     )
+    if warehouse_id:
+        stock_query = stock_query.filter(Location.warehouse_id == warehouse_id)
+    if category_id:
+        stock_query = stock_query.filter(Product.category_id == category_id)
 
-    total_stock_qty = float(stock_internal_query.total_qty) if stock_internal_query else 0.0
-    total_inv_val = float(stock_internal_query.total_val) if stock_internal_query else 0.0
+    stock_res = stock_query.first()
+    total_stock_qty = float(stock_res.total_qty) if stock_res else 0.0
+    total_inv_val = float(stock_res.total_val) if stock_res else 0.0
 
     # Low stock count
-    low_stock_count = (
+    low_stock_query = (
         db.query(StockQuant)
+        .join(Product, StockQuant.product_id == Product.id)
         .join(Location, StockQuant.location_id == Location.id)
         .filter(Location.type == "internal")
         .filter(StockQuant.quantity <= StockQuant.min_reorder_level)
-        .count()
     )
+    if warehouse_id:
+        low_stock_query = low_stock_query.filter(Location.warehouse_id == warehouse_id)
+    if category_id:
+        low_stock_query = low_stock_query.filter(Product.category_id == category_id)
+    low_stock_count = low_stock_query.count()
 
-    # Pending operations
-    pending_count = db.query(StockMove).filter(StockMove.status == "draft").count()
+    # Pending operations count by type
+    pending_receipts = db.query(Operation).filter(
+        Operation.type == "receipt",
+        Operation.status.in_(["draft", "waiting", "ready"])
+    ).count()
+
+    pending_deliveries = db.query(Operation).filter(
+        Operation.type == "delivery",
+        Operation.status.in_(["draft", "waiting", "ready"])
+    ).count()
+
+    pending_transfers = db.query(Operation).filter(
+        Operation.type == "internal",
+        Operation.status.in_(["draft", "waiting", "ready"])
+    ).count()
+
+    total_pending = pending_receipts + pending_deliveries + pending_transfers
 
     return DashboardSummary(
         total_products=total_products,
@@ -53,7 +93,10 @@ def get_dashboard_summary(db: Session) -> DashboardSummary:
         total_stock_quantity=total_stock_qty,
         total_inventory_value=round(total_inv_val, 2),
         low_stock_count=low_stock_count,
-        pending_operations_count=pending_count,
+        pending_operations_count=total_pending,
+        pending_receipts_count=pending_receipts,
+        pending_deliveries_count=pending_deliveries,
+        pending_transfers_count=pending_transfers,
     )
 
 

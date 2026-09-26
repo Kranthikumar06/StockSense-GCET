@@ -1,0 +1,104 @@
+/* ============================================================
+   StockLedger.css
+   Page-specific styles for Stock Ledger & Facility Infrastructure
+   ============================================================ */
+
+/* ── Custom Subtle Scrollbar ── */
+.stock-ledger-container ::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.stock-ledger-container ::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+.stock-ledger-container ::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+}
+.stock-ledger-container ::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* ── Cryptographic Pulse Animation ── */
+@keyframes crypto-pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.35;
+    transform: scale(0.9);
+  }
+}
+
+.crypto-pulse-dot {
+  animation: crypto-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* ── KPI & Facility Cards ── */
+.ledger-kpi-card {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+}
+
+.ledger-kpi-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.06), 0 4px 6px -2px rgba(15, 23, 42, 0.02);
+  border-color: #cbd5e1;
+}
+
+.facility-card {
+  transition: all 0.2s ease-in-out;
+  border: 1px solid rgba(226, 232, 240, 0.8);
+}
+
+.facility-card:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 8px 20px -4px rgba(15, 23, 42, 0.05);
+}
+
+/* ── Zone Item Card ── */
+.zone-item-card {
+  transition: all 0.15s ease-in-out;
+  border: 1px solid rgba(226, 232, 240, 0.9);
+}
+
+.zone-item-card:hover {
+  border-color: #f97316;
+  box-shadow: 0 4px 12px -2px rgba(249, 115, 22, 0.12);
+  transform: translateY(-1px);
+}
+
+/* ── High-Contrast Ledger Table ── */
+.ledger-table-row {
+  transition: background-color 0.15s ease;
+}
+
+.ledger-table-row:hover {
+  background-color: rgba(248, 250, 252, 0.95);
+}
+
+/* ── Drawer Transitions ── */
+.ledger-drawer-backdrop {
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.ledger-drawer-panel {
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ── Print Styles ── */
+@media print {
+  aside, header, #openAddLocationBtn, .no-print {
+    display: none !important;
+  }
+  main {
+    padding: 0 !important;
+    overflow: visible !important;
+  }
+  .ledger-table-row {
+    break-inside: avoid;
+  }
+}

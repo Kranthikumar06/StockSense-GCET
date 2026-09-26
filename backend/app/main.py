@@ -7,6 +7,12 @@ from app.database import get_db, Base, engine
 import app.models  # load all models into Base.metadata
 from app.routers.auth import router as auth_router, google_auth
 from app.routers.dashboard import router as dashboard_router
+from app.routers.products import router as products_router
+from app.routers.operations import router as operations_router
+from app.routers.categories import router as categories_router
+from app.routers.reordering_rules import router as reordering_rules_router
+from app.routers.stock_moves import router as stock_moves_router
+from app.routers.warehouses import router as warehouses_router
 from app.schemas.auth import TokenResponse
 
 # Create tables in Neon PostgreSQL database
@@ -35,6 +41,12 @@ app.add_middleware(
 # Include main routers
 app.include_router(auth_router)
 app.include_router(dashboard_router)
+app.include_router(products_router)
+app.include_router(operations_router)
+app.include_router(categories_router)
+app.include_router(reordering_rules_router)
+app.include_router(stock_moves_router)
+app.include_router(warehouses_router)
 
 # Alias route to handle both /auth/google and /api/auth/google
 app.post("/auth/google", response_model=TokenResponse, tags=["Auth"])(google_auth)

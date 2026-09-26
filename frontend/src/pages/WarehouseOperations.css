@@ -1,0 +1,138 @@
+/* ============================================================
+   WarehouseOperations.css
+   Page-specific styles for Warehouse Stock Operations Management
+   ============================================================ */
+
+/* ── Custom Subtle Scrollbar ── */
+.warehouse-ops-container ::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.warehouse-ops-container ::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+.warehouse-ops-container ::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+}
+.warehouse-ops-container ::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* ── Telemetry & Pulse Animations ── */
+@keyframes live-pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.4;
+    transform: scale(0.92);
+  }
+}
+
+.animate-live-pulse {
+  animation: live-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes signal-glow {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(249, 115, 22, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgba(249, 115, 22, 0);
+  }
+}
+
+.signal-glow-badge {
+  animation: signal-glow 2.5s ease-in-out infinite;
+}
+
+/* ── KPI Metric Cards ── */
+.ops-kpi-card {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+}
+
+.ops-kpi-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 4px 6px -2px rgba(15, 23, 42, 0.03);
+  border-color: #cbd5e1;
+}
+
+/* ── Operations Dual Command Split Cards ── */
+.command-card {
+  transition: all 0.2s ease-in-out;
+  border: 1px solid rgba(226, 232, 240, 0.8);
+}
+
+.command-card:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 8px 20px -4px rgba(15, 23, 42, 0.06);
+}
+
+/* ── Data Table Styling ── */
+.ops-table-row {
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.ops-table-row:hover {
+  background-color: rgba(248, 250, 252, 0.9);
+}
+
+.ops-table-row.row-selected {
+  background-color: rgba(255, 247, 237, 0.7) !important;
+}
+
+/* ── Slide-Over Drawer Transitions ── */
+.drawer-backdrop {
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.drawer-panel {
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ── Operation Type Selection Chips ── */
+.type-chip-btn {
+  transition: all 0.15s ease;
+}
+
+.type-chip-btn.active {
+  border-color: #ea580c;
+  background-color: #fff7ed;
+  box-shadow: 0 0 0 1px #ea580c;
+}
+
+/* ── Tab Strip Styling ── */
+.op-nav-tab {
+  transition: all 0.15s ease;
+}
+
+.op-nav-tab.active {
+  background-color: #0f172a;
+  color: #ffffff;
+  box-shadow: 0 2px 4px rgba(15, 23, 42, 0.1);
+}
+
+/* ── Custom Keyboard Key ── */
+.kbd-shortcut {
+  font-family: 'JetBrains Mono', monospace;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+}
+
+/* ── Print Styles for Picking Slips & Manifests ── */
+@media print {
+  aside, header, #triggerNewOpDrawer, .no-print {
+    display: none !important;
+  }
+  main {
+    padding: 0 !important;
+    overflow: visible !important;
+  }
+  .ops-table-row {
+    break-inside: avoid;
+  }
+}

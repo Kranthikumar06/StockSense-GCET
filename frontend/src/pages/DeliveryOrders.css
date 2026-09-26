@@ -1,0 +1,48 @@
+/* ============================================================
+   DeliveryOrders.css
+   Page-specific styles for Delivery Orders (Outgoing Stock)
+   ============================================================ */
+
+.delivery-container ::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.delivery-container ::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+.delivery-container ::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+}
+.delivery-container ::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+.delivery-card {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+}
+.delivery-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.06), 0 4px 6px -2px rgba(15, 23, 42, 0.02);
+  border-color: #cbd5e1;
+}
+
+.drawer-backdrop-delivery {
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.drawer-panel-delivery {
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media print {
+  aside, header, .no-print {
+    display: none !important;
+  }
+  main {
+    padding: 0 !important;
+    overflow: visible !important;
+  }
+}
