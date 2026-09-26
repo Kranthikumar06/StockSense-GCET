@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import EnterpriseLogin from './pages/EnterpriseLogin';
 import EnterpriseSignup from './pages/EnterpriseSignup';
+import Dashboard from './pages/Dashboard';
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
         <Route path="/signin" element={<EnterpriseLogin />} />
         <Route path="/signup" element={<EnterpriseSignup />} />
         <Route path="/register" element={<EnterpriseSignup />} />
+        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
     </Router>
