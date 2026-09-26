@@ -11,8 +11,18 @@ from app.routers.dashboard import router as dashboard_router
 # Create tables in Neon PostgreSQL database
 Base.metadata.create_all(bind=engine)
 
+# Safely migrate existing users table schema in Neon
+try:
+    with engine.connect() as conn:
+        conn.execute(text("ALTER TABLE users ADD COLUMN IF NOT EXISTS auth_provider VARCHAR DEFAULT 'email';"))
+        conn.execute(text("ALTER TABLE users ALTER COLUMN password_hash DROP NOT NULL;"))
+        conn.commit()
+except Exception as e:
+    print(f"Database schema check notice: {e}")
+
 app = FastAPI(title="StockSense API")
 
+# Enable CORS for frontend integration
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
