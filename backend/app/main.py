@@ -6,6 +6,7 @@ from sqlalchemy import text
 from app.database import get_db, Base, engine
 import app.models  # load all models into Base.metadata
 from app.routers.auth import router as auth_router
+from app.routers.dashboard import router as dashboard_router
 
 # Create tables in Neon PostgreSQL database
 Base.metadata.create_all(bind=engine)
@@ -21,6 +22,7 @@ app.add_middleware(
 )
 
 app.include_router(auth_router)
+app.include_router(dashboard_router)
 
 
 @app.get("/")
