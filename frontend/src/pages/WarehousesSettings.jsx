@@ -145,25 +145,25 @@ export default function WarehousesSettings() {
 
         {/* Workspace */}
         <div className="flex-1 flex flex-col min-w-0 overflow-hidden relative">
-          <header className="h-16 bg-white border-b border-slate-200 px-6 flex items-center justify-between flex-shrink-0 z-20">
-            <div className="flex items-center gap-3">
-              <button onClick={() => setSidebarCollapsed(!sidebarCollapsed)} className="lg:hidden p-2 text-slate-600 hover:bg-slate-100 rounded-xl">
+          <header className="h-16 bg-white border-b border-slate-200 px-4 sm:px-6 flex items-center justify-between gap-4 flex-shrink-0 z-20">
+            <div className="flex items-center gap-3 min-w-0">
+              <button onClick={() => setMobileMenuOpen(true)} className="lg:hidden p-2 text-slate-600 hover:bg-slate-100 rounded-xl">
                 <span className="material-symbols-outlined text-[22px]">menu</span>
               </button>
-              <div className="flex items-center gap-2 px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-700">
+              <div className="flex items-center gap-2 px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-700 truncate">
                 <span className="material-symbols-outlined text-orange-600 text-[18px]">settings</span>
-                <span>System Administration & Facilities</span>
+                <span className="truncate">System Administration & Facilities</span>
               </div>
             </div>
 
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 shrink-0">
               <button
                 onClick={() => setDrawerOpen(true)}
-                className="bg-orange-600 hover:bg-orange-700 text-white font-semibold text-xs px-4 py-2 rounded-xl shadow-xs flex items-center gap-1.5 transition shadow-orange-500/20 active:scale-95"
+                className="bg-orange-600 hover:bg-orange-700 text-white font-semibold text-xs px-3.5 py-2 rounded-xl shadow-xs flex items-center gap-1.5 transition shadow-orange-500/20 active:scale-95 shrink-0"
                 type="button"
               >
                 <span className="material-symbols-outlined text-[18px]">add</span>
-                <span>Add Warehouse Facility</span>
+                <span className="hidden xs:inline sm:inline">Add Warehouse Facility</span>
               </button>
             </div>
           </header>
@@ -179,10 +179,10 @@ export default function WarehousesSettings() {
             </div>
 
             {/* Tab navigation */}
-            <div className="flex items-center gap-2 border-b border-slate-200 pb-2">
+            <div className="flex items-center gap-2 border-b border-slate-200 pb-2 overflow-x-auto">
               <button
                 onClick={() => setActiveTab('warehouses')}
-                className={`px-4 py-2 rounded-xl text-xs font-bold transition ${activeTab === 'warehouses'
+                className={`px-4 py-2 rounded-xl text-xs font-bold transition whitespace-nowrap ${activeTab === 'warehouses'
                     ? 'bg-slate-900 text-white shadow-xs'
                     : 'text-slate-600 hover:bg-slate-100'
                   }`}
@@ -192,7 +192,7 @@ export default function WarehousesSettings() {
               </button>
               <button
                 onClick={() => setActiveTab('reordering')}
-                className={`px-4 py-2 rounded-xl text-xs font-bold transition ${activeTab === 'reordering'
+                className={`px-4 py-2 rounded-xl text-xs font-bold transition whitespace-nowrap ${activeTab === 'reordering'
                     ? 'bg-slate-900 text-white shadow-xs'
                     : 'text-slate-600 hover:bg-slate-100'
                   }`}
@@ -202,7 +202,7 @@ export default function WarehousesSettings() {
               </button>
               <button
                 onClick={() => setActiveTab('general')}
-                className={`px-4 py-2 rounded-xl text-xs font-bold transition ${activeTab === 'general'
+                className={`px-4 py-2 rounded-xl text-xs font-bold transition whitespace-nowrap ${activeTab === 'general'
                     ? 'bg-slate-900 text-white shadow-xs'
                     : 'text-slate-600 hover:bg-slate-100'
                   }`}
@@ -214,7 +214,7 @@ export default function WarehousesSettings() {
 
             {/* Content: Warehouses */}
             {activeTab === 'warehouses' && (
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
                 {warehouses.map((wh) => (
                   <div key={wh.id} className="warehouse-card bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
                     <div>
@@ -371,7 +371,7 @@ export default function WarehousesSettings() {
 
       {/* Add Facility Drawer */}
       {drawerOpen && (
-        <div className="fixed inset-0 z-50 overflow-hidden flex justify-end">
+        <div className="fixed inset-0 z-[70] overflow-hidden flex justify-end">
           <div onClick={() => setDrawerOpen(false)} className="drawer-backdrop-settings fixed inset-0 bg-slate-900/40 backdrop-blur-xs" />
           <aside className="drawer-panel-settings relative w-screen max-w-md bg-white shadow-2xl border-l border-slate-200 flex flex-col justify-between z-10">
             <div className="p-6 border-b border-slate-200 bg-slate-50 flex items-start justify-between">

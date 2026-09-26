@@ -117,7 +117,7 @@ export default function Dashboard() {
       >
         {/* Sticky Top Header */}
         <header className="sticky top-0 z-40 h-16 bg-white/95 backdrop-blur-md border-b border-slate-200/80 px-4 sm:px-8 flex items-center justify-between gap-4">
-          <div className="flex items-center gap-3 sm:gap-4 flex-1 max-w-2xl">
+          <div className="flex items-center gap-3 sm:gap-4 flex-1 max-w-2xl min-w-0">
             {/* Mobile Menu Toggle Button */}
             <button
               type="button"
@@ -128,7 +128,7 @@ export default function Dashboard() {
             </button>
 
             {/* Search Input */}
-            <div className="relative flex items-center flex-1">
+            <div className="relative flex items-center flex-1 min-w-0">
               <span className="material-symbols-outlined absolute left-3 text-slate-400 text-lg pointer-events-none">
                 search
               </span>
@@ -191,7 +191,7 @@ export default function Dashboard() {
           </div>
 
           {/* 5 KPI Metric Cards (Connected to PostgreSQL Database) */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-4">
             {/* Card 1: Total In-Stock Volume */}
             <div className="bg-white border border-slate-200/80 shadow-xs rounded-2xl p-4 flex flex-col justify-between hover:shadow-md transition-shadow">
               <div className="flex items-start justify-between">

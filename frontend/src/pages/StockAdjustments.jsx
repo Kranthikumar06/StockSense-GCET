@@ -161,11 +161,11 @@ export default function StockAdjustments() {
         {/* Workspace */}
         <div className="flex-1 flex flex-col min-w-0 overflow-hidden relative">
           <header className="h-16 bg-white border-b border-slate-200 px-4 sm:px-6 flex items-center justify-between gap-4 flex-shrink-0 z-20">
-            <div className="flex items-center gap-3 flex-1 max-w-2xl">
-              <button onClick={() => setSidebarCollapsed(!sidebarCollapsed)} className="lg:hidden p-2 text-slate-600 hover:bg-slate-100 rounded-xl">
+            <div className="flex items-center gap-3 flex-1 max-w-2xl min-w-0">
+              <button onClick={() => setMobileMenuOpen(true)} className="lg:hidden p-2 text-slate-600 hover:bg-slate-100 rounded-xl">
                 <span className="material-symbols-outlined text-[22px]">menu</span>
               </button>
-              <div className="relative flex items-center flex-1">
+              <div className="relative flex items-center flex-1 min-w-0">
                 <span className="material-symbols-outlined text-slate-400 text-[18px] absolute left-3 pointer-events-none">
                   search
                 </span>
@@ -176,7 +176,7 @@ export default function StockAdjustments() {
                   placeholder="Search audit ref, SKU, location..."
                   className="w-full bg-slate-100/80 border border-slate-200/80 focus:bg-white focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 rounded-xl pl-9 pr-12 py-2 text-xs text-slate-800 placeholder:text-slate-400 font-normal transition outline-none"
                 />
-                <kbd className="absolute right-2.5 px-1.5 py-0.5 text-[10px] font-mono font-medium text-slate-400 bg-white border border-slate-200/80 rounded shadow-2xs pointer-events-none">
+                <kbd className="absolute right-2.5 px-1.5 py-0.5 text-[10px] font-mono font-medium text-slate-400 bg-white border border-slate-200/80 rounded shadow-2xs pointer-events-none hidden sm:inline-block">
                   ⌘K
                 </kbd>
               </div>
@@ -185,11 +185,11 @@ export default function StockAdjustments() {
             <div className="flex items-center gap-3 shrink-0">
               <button
                 onClick={() => setDrawerOpen(true)}
-                className="bg-orange-600 hover:bg-orange-700 text-white font-semibold text-xs px-4 py-2 rounded-xl shadow-xs flex items-center gap-1.5 transition shadow-orange-500/20 active:scale-95"
+                className="bg-orange-600 hover:bg-orange-700 text-white font-semibold text-xs px-3.5 py-2 rounded-xl shadow-xs flex items-center gap-1.5 transition shadow-orange-500/20 active:scale-95 shrink-0"
                 type="button"
               >
                 <span className="material-symbols-outlined text-[18px]">add</span>
-                <span>Log Stock Adjustment</span>
+                <span className="hidden xs:inline sm:inline">Log Stock Adjustment</span>
               </button>
             </div>
           </header>
@@ -205,7 +205,7 @@ export default function StockAdjustments() {
             </div>
 
             {/* KPI Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               <div className="adj-card bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
                 <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Active Audits</span>
                 <div className="text-2xl font-extrabold text-slate-900 mt-1">{adjustments.length} Audits</div>
@@ -329,7 +329,7 @@ export default function StockAdjustments() {
 
       {/* Drawer */}
       {drawerOpen && (
-        <div className="fixed inset-0 z-50 overflow-hidden flex justify-end">
+        <div className="fixed inset-0 z-[70] overflow-hidden flex justify-end">
           <div onClick={() => setDrawerOpen(false)} className="drawer-backdrop-adj fixed inset-0 bg-slate-900/40 backdrop-blur-xs" />
           <aside className="drawer-panel-adj relative w-screen max-w-md bg-white shadow-2xl border-l border-slate-200 flex flex-col justify-between z-10">
             <div className="p-6 border-b border-slate-200 bg-slate-50 flex items-start justify-between">

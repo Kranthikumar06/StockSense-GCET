@@ -348,16 +348,16 @@ export default function WarehouseOperations() {
           {/* Top Header Bar */}
           <header className="h-16 bg-white border-b border-slate-200 px-4 sm:px-6 flex items-center justify-between gap-4 flex-shrink-0 z-20">
             {/* Left: Mobile menu button & Left-Aligned Search Bar */}
-            <div className="flex items-center gap-3 flex-1 max-w-2xl">
+            <div className="flex items-center gap-3 flex-1 max-w-2xl min-w-0">
               <button
-                onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+                onClick={() => setMobileMenuOpen(true)}
                 className="lg:hidden p-2 text-slate-600 hover:bg-slate-100 rounded-xl"
                 type="button"
               >
                 <span className="material-symbols-outlined text-[22px]">menu</span>
               </button>
 
-              <div className="relative flex items-center flex-1">
+              <div className="relative flex items-center flex-1 min-w-0">
                 <span className="material-symbols-outlined text-slate-400 text-[18px] absolute left-3 pointer-events-none">
                   search
                 </span>
@@ -368,7 +368,7 @@ export default function WarehouseOperations() {
                   placeholder="Search SKU, operation ref, partner..."
                   className="w-full bg-slate-100/80 border border-slate-200/80 focus:bg-white focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 rounded-xl pl-9 pr-12 py-2 text-xs text-slate-800 placeholder:text-slate-400 font-normal transition outline-none"
                 />
-                <kbd className="absolute right-2.5 px-1.5 py-0.5 text-[10px] font-mono font-medium text-slate-400 bg-white border border-slate-200/80 rounded shadow-2xs pointer-events-none">
+                <kbd className="absolute right-2.5 px-1.5 py-0.5 text-[10px] font-mono font-medium text-slate-400 bg-white border border-slate-200/80 rounded shadow-2xs pointer-events-none hidden sm:inline-block">
                   ⌘K
                 </kbd>
               </div>
@@ -378,12 +378,12 @@ export default function WarehouseOperations() {
             <div className="flex items-center gap-3 shrink-0">
               <button
                 onClick={() => setDrawerOpen(true)}
-                className="bg-orange-600 hover:bg-orange-700 active:bg-orange-800 text-white font-semibold text-xs px-4 py-2 rounded-xl shadow-xs flex items-center gap-1.5 transition-all shadow-orange-500/20 active:scale-95"
+                className="bg-orange-600 hover:bg-orange-700 active:bg-orange-800 text-white font-semibold text-xs px-3.5 py-2 rounded-xl shadow-xs flex items-center gap-1.5 transition-all shadow-orange-500/20 active:scale-95 shrink-0"
                 type="button"
                 id="openNewOpBtn"
               >
                 <span className="material-symbols-outlined text-[18px]">add</span>
-                <span>Create Operation</span>
+                <span className="hidden xs:inline sm:inline">Create Operation</span>
               </button>
             </div>
           </header>
@@ -1014,7 +1014,7 @@ export default function WarehouseOperations() {
       {/* Slide-Over Drawer: Create New Operation Modal                 */}
       {/* ============================================================ */}
       {drawerOpen && (
-        <div className="fixed inset-0 z-50 overflow-hidden flex justify-end">
+        <div className="fixed inset-0 z-[70] overflow-hidden flex justify-end">
           {/* Dimmed Backdrop */}
           <div
             onClick={() => setDrawerOpen(false)}

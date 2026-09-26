@@ -176,6 +176,7 @@ export default function Sidebar({ activeRoute, collapsed, onToggle, mobileOpen, 
                 <Link
                   key={item.label}
                   to={item.href}
+                  onClick={handleMobileClose}
                   className={`${baseClass} ${stateClass}`}
                   title={item.label}
                 >

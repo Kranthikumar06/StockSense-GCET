@@ -177,7 +177,7 @@ export default function ProductCatalog() {
       <div className={`flex-1 flex flex-col min-w-0 transition-all duration-300 ease-in-out ${sidebarCollapsed ? 'lg:pl-[76px]' : 'lg:pl-64'}`}>
         {/* Sticky Top Header */}
         <header className="sticky top-0 z-40 h-16 bg-white/95 backdrop-blur-md border-b border-slate-200/80 px-4 sm:px-6 flex items-center justify-between gap-4">
-          <div className="flex items-center gap-3 flex-1 max-w-2xl">
+          <div className="flex items-center gap-3 flex-1 max-w-2xl min-w-0">
             <button
               onClick={() => setMobileMenuOpen(true)}
               className="lg:hidden p-2 rounded-xl text-slate-600 hover:bg-slate-100"
@@ -185,7 +185,7 @@ export default function ProductCatalog() {
               <span className="material-symbols-outlined text-2xl">menu</span>
             </button>
             {/* Search */}
-            <div className="relative flex items-center flex-1">
+            <div className="relative flex items-center flex-1 min-w-0">
               <span className="material-symbols-outlined absolute left-3 text-slate-400 text-lg pointer-events-none">search</span>
               <input
                 type="text"
@@ -197,7 +197,7 @@ export default function ProductCatalog() {
             </div>
           </div>
           {/* Right actions */}
-          <div className="flex items-center gap-3 shrink-0">
+          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
             <button
               onClick={() => fetchProducts()}
               className="p-2 rounded-xl text-slate-600 hover:bg-slate-100 transition-colors"
@@ -207,10 +207,10 @@ export default function ProductCatalog() {
             </button>
             <button
               onClick={() => setDrawerOpen(true)}
-              className="flex items-center gap-1.5 px-3 sm:px-3.5 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-xl text-xs sm:text-sm font-semibold shadow-sm transition-all"
+              className="flex items-center gap-1.5 px-3 sm:px-3.5 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-xl text-xs sm:text-sm font-semibold shadow-sm transition-all shrink-0"
             >
               <span className="material-symbols-outlined text-base">add</span>
-              <span className="hidden sm:inline">Add Product</span>
+              <span className="hidden xs:inline sm:inline">Add Product</span>
             </button>
           </div>
         </header>
