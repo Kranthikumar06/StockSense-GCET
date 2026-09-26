@@ -2,11 +2,53 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>frontend</title>
+    <title>StockSense WMS Enterprise</title>
+    <!-- Tailwind CSS CDN with forms and container queries plugins -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              brand: {
+                navy: '#181E4B',
+                dark: '#181E4B',
+                coral: '#DF6951',
+                orange: '#DF6951',
+                amber: '#F1A501',
+                warmYellow: '#FFF1DA',
+                peachBg: '#FFF7ED',
+                softGray: '#5E6282',
+                muted: '#5E6282',
+                cardBg: '#FFFFFF',
+                borderLine: '#E5E7EB',
+                cream: '#FFF1DA',
+                lightBg: '#FAF9F6',
+              }
+            },
+            fontFamily: {
+              sans: ['Plus Jakarta Sans', 'Inter', 'system-ui', 'sans-serif'],
+              serif: ['Volkhov', 'Georgia', 'serif'],
+              display: ['Volkhov', 'Georgia', 'serif']
+            },
+            boxShadow: {
+              'glow-warm': '0px 20px 35px rgba(241, 165, 1, 0.22)',
+              'glow-orange': '0 20px 35px -10px rgba(241, 165, 1, 0.38)',
+              'float-card': '0px 25px 50px -12px rgba(24, 30, 75, 0.12)',
+              'soft': '0px 10px 30px rgba(0, 0, 0, 0.05)'
+            }
+          }
+        }
+      }
+    </script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Volkhov:ital,wght@0,700;1,700&display=swap" rel="stylesheet" />
   </head>
-  <body>
+  <body class="antialiased min-h-screen">
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
