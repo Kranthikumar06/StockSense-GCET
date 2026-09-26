@@ -1,12 +1,18 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { GoogleLogin } from '@react-oauth/google';
 import axios from 'axios';
 import StockSenseLogo from '../components/StockSenseLogo';
+import { useGoogleAuth } from '../hooks/useGoogleAuth';
 
 const API_URL = 'http://localhost:8000/api/auth';
 
 export default function EnterpriseLogin() {
   const navigate = useNavigate();
+  const { loading: googleLoading, error: googleError, handleGoogleSuccess, handleGoogleError } = useGoogleAuth(() => {
+    navigate('/dashboard');
+  });
+
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -191,6 +197,51 @@ export default function EnterpriseLogin() {
                       <path d="M14 5l7 7m0 0l-7 7m7-7H3" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5"></path>
                     </svg>
                   </button>
+                </div>
+
+                {/* Divider */}
+                <div className="relative flex items-center justify-center my-3 sm:my-3.5">
+                  <div className="border-t border-stone-200 w-full"></div>
+                  <span className="bg-white px-3 text-[10px] font-semibold uppercase text-brand-muted tracking-widest absolute">
+                    Or Continue With
+                  </span>
+                </div>
+
+                {/* Google Auth Error State */}
+                {googleError && (
+                  <div className="p-2.5 mb-2 text-xs font-medium text-rose-700 bg-rose-50 border border-rose-200 rounded-xl flex items-center gap-2">
+                    <span>⚠️</span>
+                    <span>{googleError}</span>
+                  </div>
+                )}
+
+                {/* Google Sign In Button */}
+                <div className="w-full flex justify-center">
+                  {googleLoading ? (
+                    <div className="py-2 text-xs font-semibold text-stone-500 animate-pulse flex items-center gap-2">
+                      <svg className="w-4 h-4 animate-spin text-brand-amber" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                      </svg>
+                      <span>Authenticating with Google...</span>
+                    </div>
+                  ) : (
+                    <div className="w-full flex justify-center [&>div]:w-full">
+                      <GoogleLogin
+                        onSuccess={(credentialResponse) => {
+                          if (credentialResponse.credential) {
+                            handleGoogleSuccess(credentialResponse.credential);
+                          }
+                        }}
+                        onError={handleGoogleError}
+                        text="signin_with"
+                        shape="rectangular"
+                        theme="outline"
+                        size="large"
+                        width="100%"
+                      />
+                    </div>
+                  )}
                 </div>
               </form>
 

@@ -21,7 +21,7 @@ export function useGoogleAuth(onSuccessCallback) {
     setError(null);
 
     try {
-      const response = await api.post('/auth/google', { id_token: idToken });
+      const response = await api.post('/api/auth/google', { id_token: idToken });
       const { access_token, user } = response.data;
 
       if (access_token) {

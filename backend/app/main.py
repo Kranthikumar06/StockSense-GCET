@@ -5,8 +5,9 @@ from sqlalchemy import text
 
 from app.database import get_db, Base, engine
 import app.models  # load all models into Base.metadata
-from app.routers.auth import router as auth_router
+from app.routers.auth import router as auth_router, google_auth
 from app.routers.dashboard import router as dashboard_router
+from app.schemas.auth import TokenResponse
 
 # Create tables in Neon PostgreSQL database
 Base.metadata.create_all(bind=engine)
@@ -31,8 +32,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Include main routers
 app.include_router(auth_router)
 app.include_router(dashboard_router)
+
+# Alias route to handle both /auth/google and /api/auth/google
+app.post("/auth/google", response_model=TokenResponse, tags=["Auth"])(google_auth)
 
 
 @app.get("/")
