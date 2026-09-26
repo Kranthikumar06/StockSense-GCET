@@ -1,0 +1,116 @@
+/* ============================================================
+   EnterpriseLogin.css
+   Page-specific styles for the Enterprise Login page
+   ============================================================ */
+
+/* Warm blob corner decal - right background decoration */
+.login-blob-decal {
+  position: absolute;
+  top: -6rem;
+  right: -8rem;
+  width: 58vw;
+  height: 95vh;
+  background: #FFF1DA;
+  border-bottom-left-radius: 48% 55%;
+  border-bottom-right-radius: 12% 10%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Purple ambient glow - top left */
+.login-glow-purple {
+  position: absolute;
+  top: -8rem;
+  left: -8rem;
+  width: 24rem;
+  height: 24rem;
+  background: radial-gradient(circle, rgba(167, 139, 250, 0.25) 0%, transparent 70%);
+  border-radius: 50%;
+  filter: blur(48px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Orange ambient glow - center right */
+.login-glow-orange {
+  position: absolute;
+  top: 33%;
+  right: 2.5rem;
+  width: 20rem;
+  height: 20rem;
+  background: radial-gradient(circle, rgba(251, 146, 60, 0.30) 0%, transparent 70%);
+  border-radius: 50%;
+  filter: blur(48px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Floating card shadow for the login form */
+.login-card {
+  box-shadow: 0px 25px 50px -12px rgba(24, 30, 75, 0.12);
+  transition: box-shadow 0.25s ease;
+}
+
+.login-card:hover {
+  box-shadow: 0px 30px 60px -10px rgba(24, 30, 75, 0.16);
+}
+
+/* Orange glow on submit button */
+.login-btn-glow {
+  box-shadow: 0 20px 35px -10px rgba(241, 165, 1, 0.38);
+  transition: box-shadow 0.2s ease, transform 0.15s ease;
+}
+
+.login-btn-glow:hover {
+  box-shadow: 0 24px 40px -8px rgba(241, 165, 1, 0.48);
+  transform: translateY(-1px);
+}
+
+.login-btn-glow:active {
+  transform: scale(0.99);
+  box-shadow: none;
+}
+
+/* Wavy orange underline on headline keyword */
+.login-headline-accent {
+  text-decoration: underline;
+  text-decoration-color: rgba(255, 107, 0, 0.4);
+  text-decoration-style: wavy;
+  text-underline-offset: 4px;
+  color: #FF6B00;
+}
+
+/* Trust badge row */
+.login-trust-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.625rem;
+  font-weight: 600;
+  color: #5E6282;
+  letter-spacing: 0.02em;
+}
+
+/* Stats card micro-animation */
+.login-stat-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.login-stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+/* Custom scrollbar for login page content */
+.login-page ::-webkit-scrollbar {
+  width: 4px;
+}
+
+.login-page ::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.login-page ::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 9999px;
+}

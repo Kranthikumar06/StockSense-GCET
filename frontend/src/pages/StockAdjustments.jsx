@@ -240,11 +240,10 @@ export default function StockAdjustments() {
                   <button
                     key={st}
                     onClick={() => setStatusFilter(st)}
-                    className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition ${
-                      statusFilter === st
+                    className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition ${statusFilter === st
                         ? 'bg-slate-900 text-white shadow-xs'
                         : 'bg-slate-50 text-slate-600 hover:bg-slate-100 border border-slate-200/60'
-                    }`}
+                      }`}
                     type="button"
                   >
                     {st === 'All' ? `All Adjustments (${adjustments.length})` : st}
@@ -284,13 +283,12 @@ export default function StockAdjustments() {
                         <td className="py-3 px-4 font-mono font-bold">{a.countedQty} {a.uom}</td>
                         <td className="py-3 px-4 font-mono font-bold">
                           <span
-                            className={`px-2 py-0.5 rounded text-xs ${
-                              a.variance < 0
+                            className={`px-2 py-0.5 rounded text-xs ${a.variance < 0
                                 ? 'bg-rose-50 text-rose-700 border border-rose-200'
                                 : a.variance > 0
-                                ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                                : 'bg-slate-100 text-slate-700'
-                            }`}
+                                  ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                                  : 'bg-slate-100 text-slate-700'
+                              }`}
                           >
                             {a.variance > 0 ? `+${a.variance}` : a.variance} {a.uom}
                           </span>
@@ -298,13 +296,12 @@ export default function StockAdjustments() {
                         <td className="py-3 px-4 text-slate-600 max-w-xs truncate">{a.reason}</td>
                         <td className="py-3 px-3 text-center">
                           <span
-                            className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold ${
-                              a.status === 'Ready'
+                            className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold ${a.status === 'Ready'
                                 ? 'bg-amber-100 text-amber-800'
                                 : a.status === 'Done'
-                                ? 'bg-slate-100 text-slate-600'
-                                : 'bg-rose-100 text-rose-800'
-                            }`}
+                                  ? 'bg-slate-100 text-slate-600'
+                                  : 'bg-rose-100 text-rose-800'
+                              }`}
                           >
                             {a.status}
                           </span>

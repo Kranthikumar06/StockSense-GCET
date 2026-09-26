@@ -289,10 +289,10 @@ export default function WarehouseOperations() {
       newOpType === 'Receipt'
         ? 'IN'
         : newOpType === 'Delivery'
-        ? 'OUT'
-        : newOpType === 'Transfer'
-        ? 'INT'
-        : 'ADJ';
+          ? 'OUT'
+          : newOpType === 'Transfer'
+            ? 'INT'
+            : 'ADJ';
     const randNum = Math.floor(100 + Math.random() * 900);
     const newDoc = {
       id: Date.now(),
@@ -491,9 +491,8 @@ export default function WarehouseOperations() {
               {/* Card 1: Inbound Receipts */}
               <div
                 onClick={() => setActiveTab('Receipts')}
-                className={`ops-kpi-card relative overflow-hidden rounded-2xl bg-white p-5 shadow-sm cursor-pointer transition-all ${
-                  activeTab === 'Receipts' ? 'ring-2 ring-orange-500' : ''
-                }`}
+                className={`ops-kpi-card relative overflow-hidden rounded-2xl bg-white p-5 shadow-sm cursor-pointer transition-all ${activeTab === 'Receipts' ? 'ring-2 ring-orange-500' : ''
+                  }`}
               >
                 <div className="flex items-start justify-between">
                   <div>
@@ -524,9 +523,8 @@ export default function WarehouseOperations() {
               {/* Card 2: Delivery Orders */}
               <div
                 onClick={() => setActiveTab('Delivery Orders')}
-                className={`ops-kpi-card relative overflow-hidden rounded-2xl bg-white p-5 shadow-sm cursor-pointer transition-all ${
-                  activeTab === 'Delivery Orders' ? 'ring-2 ring-indigo-500' : ''
-                }`}
+                className={`ops-kpi-card relative overflow-hidden rounded-2xl bg-white p-5 shadow-sm cursor-pointer transition-all ${activeTab === 'Delivery Orders' ? 'ring-2 ring-indigo-500' : ''
+                  }`}
               >
                 <div className="flex items-start justify-between">
                   <div>
@@ -556,9 +554,8 @@ export default function WarehouseOperations() {
               {/* Card 3: Internal Transfers */}
               <div
                 onClick={() => setActiveTab('Internal Transfers')}
-                className={`ops-kpi-card relative overflow-hidden rounded-2xl bg-white p-5 shadow-sm cursor-pointer transition-all ${
-                  activeTab === 'Internal Transfers' ? 'ring-2 ring-blue-500' : ''
-                }`}
+                className={`ops-kpi-card relative overflow-hidden rounded-2xl bg-white p-5 shadow-sm cursor-pointer transition-all ${activeTab === 'Internal Transfers' ? 'ring-2 ring-blue-500' : ''
+                  }`}
               >
                 <div className="flex items-start justify-between">
                   <div>
@@ -588,9 +585,8 @@ export default function WarehouseOperations() {
               {/* Card 4: Stock Attention / Adjustments */}
               <div
                 onClick={() => setActiveTab('Stock Adjustments')}
-                className={`ops-kpi-card relative overflow-hidden rounded-2xl bg-white p-5 shadow-sm cursor-pointer transition-all ${
-                  activeTab === 'Stock Adjustments' ? 'ring-2 ring-rose-500' : ''
-                }`}
+                className={`ops-kpi-card relative overflow-hidden rounded-2xl bg-white p-5 shadow-sm cursor-pointer transition-all ${activeTab === 'Stock Adjustments' ? 'ring-2 ring-rose-500' : ''
+                  }`}
               >
                 <div className="flex items-start justify-between">
                   <div>
@@ -759,11 +755,10 @@ export default function WarehouseOperations() {
                       <button
                         key={tab.id}
                         onClick={() => setActiveTab(tab.id)}
-                        className={`op-nav-tab px-3.5 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all ${
-                          isActive
+                        className={`op-nav-tab px-3.5 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all ${isActive
                             ? 'bg-slate-900 text-white shadow-xs'
                             : 'bg-slate-50 text-slate-600 hover:bg-slate-100 border border-slate-200/60'
-                        }`}
+                          }`}
                         type="button"
                       >
                         {tab.dot && <span className={`w-2 h-2 rounded-full ${tab.dot}`} />}
@@ -896,15 +891,14 @@ export default function WarehouseOperations() {
                             {/* Type Badge */}
                             <td className="py-3 px-3">
                               <span
-                                className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold ${
-                                  op.type === 'Receipt'
+                                className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold ${op.type === 'Receipt'
                                     ? 'bg-emerald-50 text-emerald-700 border border-emerald-200/60'
                                     : op.type === 'Delivery'
-                                    ? 'bg-purple-50 text-purple-700 border border-purple-200/60'
-                                    : op.type === 'Transfer'
-                                    ? 'bg-blue-50 text-blue-700 border border-blue-200/60'
-                                    : 'bg-amber-50 text-amber-800 border border-amber-200/60'
-                                }`}
+                                      ? 'bg-purple-50 text-purple-700 border border-purple-200/60'
+                                      : op.type === 'Transfer'
+                                        ? 'bg-blue-50 text-blue-700 border border-blue-200/60'
+                                        : 'bg-amber-50 text-amber-800 border border-amber-200/60'
+                                  }`}
                               >
                                 {op.type}
                               </span>
@@ -936,13 +930,12 @@ export default function WarehouseOperations() {
                             <td className="py-3 px-4">
                               <div className="font-medium text-slate-900">{op.scheduled}</div>
                               <div
-                                className={`text-[11px] font-semibold flex items-center gap-1 ${
-                                  op.slaStatus === 'good'
+                                className={`text-[11px] font-semibold flex items-center gap-1 ${op.slaStatus === 'good'
                                     ? 'text-emerald-600'
                                     : op.slaStatus === 'warning'
-                                    ? 'text-orange-600'
-                                    : 'text-slate-500'
-                                }`}
+                                      ? 'text-orange-600'
+                                      : 'text-slate-500'
+                                  }`}
                               >
                                 {op.slaStatus === 'good' && (
                                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
@@ -957,15 +950,14 @@ export default function WarehouseOperations() {
                             {/* Status Badge */}
                             <td className="py-3 px-3 text-center">
                               <span
-                                className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-semibold ${
-                                  op.status === 'Ready'
+                                className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-semibold ${op.status === 'Ready'
                                     ? 'bg-emerald-100/70 text-emerald-800'
                                     : op.status === 'Waiting'
-                                    ? 'bg-amber-100/70 text-amber-800'
-                                    : op.status === 'Done'
-                                    ? 'bg-slate-100 text-slate-600'
-                                    : 'bg-slate-100 text-slate-500'
-                                }`}
+                                      ? 'bg-amber-100/70 text-amber-800'
+                                      : op.status === 'Done'
+                                        ? 'bg-slate-100 text-slate-600'
+                                        : 'bg-slate-100 text-slate-500'
+                                  }`}
                               >
                                 {op.status === 'Ready' && (
                                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse"></span>
@@ -1109,11 +1101,10 @@ export default function WarehouseOperations() {
                       key={t.type}
                       type="button"
                       onClick={() => setNewOpType(t.type)}
-                      className={`type-chip-btn p-3 rounded-xl border text-left flex items-center gap-2.5 transition-all ${
-                        newOpType === t.type
+                      className={`type-chip-btn p-3 rounded-xl border text-left flex items-center gap-2.5 transition-all ${newOpType === t.type
                           ? 'border-orange-500 bg-orange-50/70 text-orange-900 shadow-xs'
                           : 'border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100'
-                      }`}
+                        }`}
                     >
                       <span className={`material-symbols-outlined text-[22px] ${t.iconColor}`}>{t.icon}</span>
                       <div>

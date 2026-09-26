@@ -358,16 +358,14 @@ export default function ProductCatalog() {
                 <button
                   key={s}
                   onClick={() => setActiveStatus(s)}
-                  className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold transition-colors ${
-                    activeStatus === s
+                  className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold transition-colors ${activeStatus === s
                       ? 'bg-slate-900 text-white'
                       : 'bg-slate-100 hover:bg-slate-200 text-slate-600'
-                  }`}
+                    }`}
                 >
                   {s !== 'All' && (
-                    <span className={`w-1.5 h-1.5 rounded-full ${
-                      s === 'In Stock' ? 'bg-emerald-500' : s === 'Low Stock' ? 'bg-amber-500' : 'bg-rose-500'
-                    }`} />
+                    <span className={`w-1.5 h-1.5 rounded-full ${s === 'In Stock' ? 'bg-emerald-500' : s === 'Low Stock' ? 'bg-amber-500' : 'bg-rose-500'
+                      }`} />
                   )}
                   {s}
                 </button>
@@ -417,8 +415,8 @@ export default function ProductCatalog() {
                         status === 'In Stock'
                           ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
                           : status === 'Low Stock'
-                          ? 'bg-amber-50 text-amber-800 border-amber-200'
-                          : 'bg-rose-50 text-rose-700 border-rose-200';
+                            ? 'bg-amber-50 text-amber-800 border-amber-200'
+                            : 'bg-rose-50 text-rose-700 border-rose-200';
                       const dotColor =
                         status === 'In Stock' ? 'bg-emerald-500' : status === 'Low Stock' ? 'bg-amber-500' : 'bg-rose-500';
 
@@ -537,9 +535,8 @@ export default function ProductCatalog() {
 
       {/* ── ADD PRODUCT DRAWER ── */}
       <div
-        className={`fixed inset-y-0 right-0 w-full max-w-xl bg-white shadow-2xl z-[60] flex flex-col justify-between transition-transform duration-300 ease-out ${
-          drawerOpen ? 'translate-x-0' : 'translate-x-full'
-        }`}
+        className={`fixed inset-y-0 right-0 w-full max-w-xl bg-white shadow-2xl z-[60] flex flex-col justify-between transition-transform duration-300 ease-out ${drawerOpen ? 'translate-x-0' : 'translate-x-full'
+          }`}
       >
         {/* Drawer Header */}
         <div className="px-6 py-4 bg-slate-50 flex items-center justify-between flex-shrink-0 border-b border-slate-200">

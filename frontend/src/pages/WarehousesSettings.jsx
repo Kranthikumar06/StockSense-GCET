@@ -186,33 +186,30 @@ export default function WarehousesSettings() {
             <div className="flex items-center gap-2 border-b border-slate-200 pb-2">
               <button
                 onClick={() => setActiveTab('warehouses')}
-                className={`px-4 py-2 rounded-xl text-xs font-bold transition ${
-                  activeTab === 'warehouses'
+                className={`px-4 py-2 rounded-xl text-xs font-bold transition ${activeTab === 'warehouses'
                     ? 'bg-slate-900 text-white shadow-xs'
                     : 'text-slate-600 hover:bg-slate-100'
-                }`}
+                  }`}
                 type="button"
               >
                 Warehouse Facilities ({warehouses.length})
               </button>
               <button
                 onClick={() => setActiveTab('reordering')}
-                className={`px-4 py-2 rounded-xl text-xs font-bold transition ${
-                  activeTab === 'reordering'
+                className={`px-4 py-2 rounded-xl text-xs font-bold transition ${activeTab === 'reordering'
                     ? 'bg-slate-900 text-white shadow-xs'
                     : 'text-slate-600 hover:bg-slate-100'
-                }`}
+                  }`}
                 type="button"
               >
                 Reordering Rules ({reorderRules.length})
               </button>
               <button
                 onClick={() => setActiveTab('general')}
-                className={`px-4 py-2 rounded-xl text-xs font-bold transition ${
-                  activeTab === 'general'
+                className={`px-4 py-2 rounded-xl text-xs font-bold transition ${activeTab === 'general'
                     ? 'bg-slate-900 text-white shadow-xs'
                     : 'text-slate-600 hover:bg-slate-100'
-                }`}
+                  }`}
                 type="button"
               >
                 System Parameters & Barcodes

@@ -284,31 +284,28 @@ export default function Receipts() {
                 <button
                   key={st}
                   onClick={() => setStatusFilter(st)}
-                  className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
-                    statusFilter === st ? 'bg-slate-900 text-white' : 'bg-slate-100 hover:bg-slate-200 text-slate-600'
-                  }`}
+                  className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors ${statusFilter === st ? 'bg-slate-900 text-white' : 'bg-slate-100 hover:bg-slate-200 text-slate-600'
+                    }`}
                 >
                   {st === 'All' ? `All Receipts (${receipts.length})` : st}
                 </button>
               ))}
             </div>
-            
+
             {/* View Mode Switcher */}
             <div className="flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200/80">
               <button
                 onClick={() => setViewMode('list')}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-                  viewMode === 'list' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-500 hover:text-slate-800'
-                }`}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${viewMode === 'list' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-500 hover:text-slate-800'
+                  }`}
               >
                 <span className="material-symbols-outlined text-base">format_list_bulleted</span>
                 List
               </button>
               <button
                 onClick={() => setViewMode('kanban')}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-                  viewMode === 'kanban' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-500 hover:text-slate-800'
-                }`}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${viewMode === 'kanban' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-500 hover:text-slate-800'
+                  }`}
               >
                 <span className="material-symbols-outlined text-base">view_kanban</span>
                 Kanban
@@ -460,15 +457,14 @@ export default function Receipts() {
                             </td>
                             <td className="py-3.5 px-4">
                               <span
-                                className={`px-2.5 py-1 rounded-full text-[11px] font-semibold border ${
-                                  isDone
+                                className={`px-2.5 py-1 rounded-full text-[11px] font-semibold border ${isDone
                                     ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
                                     : isReady
-                                    ? 'bg-amber-50 text-amber-800 border-amber-200'
-                                    : isCanceled
-                                    ? 'bg-rose-50 text-rose-700 border-rose-200'
-                                    : 'bg-slate-100 text-slate-700 border-slate-200'
-                                }`}
+                                      ? 'bg-amber-50 text-amber-800 border-amber-200'
+                                      : isCanceled
+                                        ? 'bg-rose-50 text-rose-700 border-rose-200'
+                                        : 'bg-slate-100 text-slate-700 border-slate-200'
+                                  }`}
                               >
                                 • {r.status.toUpperCase()}
                               </span>
@@ -515,9 +511,8 @@ export default function Receipts() {
 
       {/* Add New Receipt Drawer */}
       <div
-        className={`fixed inset-y-0 right-0 w-full max-w-xl bg-white shadow-2xl z-[60] flex flex-col justify-between transition-transform duration-300 ease-out ${
-          drawerOpen ? 'translate-x-0' : 'translate-x-full'
-        }`}
+        className={`fixed inset-y-0 right-0 w-full max-w-xl bg-white shadow-2xl z-[60] flex flex-col justify-between transition-transform duration-300 ease-out ${drawerOpen ? 'translate-x-0' : 'translate-x-full'
+          }`}
       >
         <div className="px-6 py-4 bg-slate-50 flex items-center justify-between flex-shrink-0 border-b border-slate-200">
           <div>

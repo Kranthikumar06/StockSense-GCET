@@ -704,11 +704,10 @@ export default function StockLedger() {
                           key={tab.id}
                           type="button"
                           onClick={() => setActiveFilterTab(tab.id)}
-                          className={`px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap flex items-center gap-1.5 transition ${
-                            isActive
+                          className={`px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap flex items-center gap-1.5 transition ${isActive
                               ? 'bg-slate-900 text-white shadow-xs'
                               : 'text-slate-600 hover:bg-slate-100'
-                          }`}
+                            }`}
                         >
                           {tab.dot && <span className={`w-2 h-2 rounded-full ${tab.dot}`} />}
                           <span>{tab.label}</span>

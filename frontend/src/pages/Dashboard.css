@@ -1,0 +1,184 @@
+/* ============================================================
+   Dashboard.css
+   Page-specific styles for the Warehouse Operations Dashboard
+   ============================================================ */
+
+/* ── Sidebar ── */
+
+/* Sidebar transition */
+.dashboard-sidebar {
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Sidebar nav link base hover effect */
+.sidebar-nav-link {
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+/* Active nav item pulse ring */
+.sidebar-nav-active {
+  position: relative;
+}
+
+.sidebar-nav-active::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 0.75rem;
+  box-shadow: 0 0 0 2px rgba(234, 88, 12, 0.25);
+  pointer-events: none;
+}
+
+/* Collapsed icon tooltip on hover */
+.sidebar-icon-tooltip {
+  position: relative;
+}
+
+.sidebar-icon-tooltip:hover::after {
+  content: attr(title);
+  position: absolute;
+  left: calc(100% + 12px);
+  top: 50%;
+  transform: translateY(-50%);
+  background: #1e293b;
+  color: #f8fafc;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+  padding: 4px 10px;
+  border-radius: 6px;
+  pointer-events: none;
+  z-index: 100;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* ── Top Header ── */
+
+.dashboard-header {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* ── KPI Cards ── */
+
+.kpi-card {
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.kpi-card:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
+}
+
+/* Sparkline SVG smooth curve animation */
+.sparkline-path {
+  stroke-dasharray: 300;
+  stroke-dashoffset: 300;
+  animation: drawSparkline 1.2s ease forwards;
+}
+
+@keyframes drawSparkline {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* ── Action Cards ── */
+
+.action-card {
+  transition: box-shadow 0.2s ease;
+}
+
+.action-card:hover {
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.09);
+}
+
+/* Ambient blob decorations on action cards */
+.action-card-blob {
+  filter: blur(32px);
+  pointer-events: none;
+}
+
+/* ── Operations Table ── */
+
+.ops-table-row {
+  transition: background-color 0.12s ease;
+}
+
+/* Pulsing waiting status badge */
+.status-waiting {
+  animation: statusPulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes statusPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+/* Inspect button hover */
+.ops-inspect-btn {
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+/* ── Live Indicator ── */
+
+.live-dot {
+  animation: livePulse 2s ease-in-out infinite;
+}
+
+@keyframes livePulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(0.85);
+  }
+}
+
+/* ── Telemetry Cards ── */
+
+.telemetry-card {
+  transition: box-shadow 0.2s ease;
+}
+
+.telemetry-card:hover {
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+}
+
+/* ── Mobile Menu Backdrop ── */
+
+.mobile-backdrop {
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ── Custom Scrollbar ── */
+
+.dashboard-page ::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+.dashboard-page ::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+.dashboard-page ::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+}
+
+.dashboard-page ::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Sidebar nav scrollbar hidden */
+.sidebar-nav::-webkit-scrollbar {
+  display: none;
+}

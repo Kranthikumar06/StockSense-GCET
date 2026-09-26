@@ -1,0 +1,118 @@
+/* ============================================================
+   EnterpriseSignup.css
+   Page-specific styles for the Enterprise Sign Up page
+   ============================================================ */
+
+/* Curved warm blob background - top right quadrant */
+.signup-blob-bg {
+  position: absolute;
+  top: -60px;
+  right: -80px;
+  width: 760px;
+  height: 820px;
+  background: radial-gradient(circle at 65% 35%, #FFE9CF 0%, #FFF4E5 45%, #FFFFFF 85%);
+  border-radius: 46% 54% 63% 37% / 39% 45% 55% 61%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Coral ambient glow - top left */
+.signup-glow-left {
+  position: absolute;
+  top: 60px;
+  left: -120px;
+  width: 480px;
+  height: 480px;
+  background: radial-gradient(circle, rgba(223, 105, 81, 0.08) 0%, rgba(255, 255, 255, 0) 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Floating card shadow */
+.signup-card {
+  box-shadow: 0px 25px 50px -12px rgba(24, 30, 75, 0.10);
+  transition: box-shadow 0.25s ease;
+}
+
+/* Warm glow CTA button */
+.signup-btn-warm {
+  box-shadow: 0px 20px 35px rgba(241, 165, 1, 0.22);
+  transition: box-shadow 0.2s ease, transform 0.15s ease;
+}
+
+.signup-btn-warm:hover {
+  box-shadow: 0 24px 40px rgba(241, 165, 1, 0.32);
+  transform: translateY(-1px);
+}
+
+.signup-btn-warm:active {
+  transform: scale(0.99);
+  box-shadow: none;
+}
+
+/* Arrow icon animation on CTA */
+.signup-btn-warm svg {
+  transition: transform 0.2s ease;
+}
+
+.signup-btn-warm:hover svg {
+  transform: translateX(4px);
+}
+
+/* Feature list items */
+.signup-feature-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid rgba(229, 231, 235, 0.6);
+  transition: background 0.15s ease;
+}
+
+.signup-feature-item:last-child {
+  border-bottom: none;
+}
+
+/* Highlight text underline */
+.signup-highlight {
+  background-image: linear-gradient(120deg, #DF6951 0%, #F1A501 100%);
+  background-repeat: no-repeat;
+  background-size: 100% 35%;
+  background-position: 0 88%;
+}
+
+/* Right panel organic blob */
+.signup-right-blob {
+  background: radial-gradient(circle at 65% 30%, #FFF3E3 0%, #FFE9CF 60%, rgba(255, 245, 235, 0) 100%);
+  border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%;
+}
+
+/* Trust badge hover */
+.signup-trust-badge {
+  transition: transform 0.2s ease;
+}
+
+.signup-trust-badge:hover {
+  transform: scale(1.04);
+}
+
+/* Input focus ring */
+.signup-input:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(241, 165, 1, 0.18);
+  border-color: rgba(241, 165, 1, 0.6);
+}
+
+/* Custom scrollbar */
+.signup-page ::-webkit-scrollbar {
+  width: 4px;
+}
+
+.signup-page ::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.signup-page ::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.10);
+  border-radius: 9999px;
+}

@@ -1,6 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { GoogleOAuthProvider } from '@react-oauth/google';
+
+// Pages
 import EnterpriseLogin from './pages/EnterpriseLogin';
 import EnterpriseSignup from './pages/EnterpriseSignup';
 import Dashboard from './pages/Dashboard';
@@ -21,6 +23,7 @@ function App() {
     <GoogleOAuthProvider clientId={googleClientId}>
       <Router>
         <Routes>
+          {/* Auth Routes */}
           {/* Auth Routes */}
           <Route path="/" element={<EnterpriseLogin />} />
           <Route path="/login" element={<EnterpriseLogin />} />
