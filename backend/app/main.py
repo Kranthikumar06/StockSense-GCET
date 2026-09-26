@@ -2,7 +2,11 @@ from fastapi import FastAPI, Depends
 from sqlalchemy.orm import Session
 from sqlalchemy import text
 
-from app.database import get_db
+from app.database import get_db, Base, engine
+import app.models  # load all models into Base.metadata
+
+# Create tables in Neon PostgreSQL database
+Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="StockSense API")
 
